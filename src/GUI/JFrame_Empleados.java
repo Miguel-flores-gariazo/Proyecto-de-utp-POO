@@ -1,9 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
-package GUI;
 
+package GUI;
 /**
  *
  * @author KB
@@ -28,7 +24,7 @@ public class JFrame_Empleados extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tablaempleados = new javax.swing.JTable();
+        tbempleados = new javax.swing.JTable();
         botonregistrarempleado = new javax.swing.JButton();
         botoneliminar = new javax.swing.JButton();
         botonmodificar = new javax.swing.JButton();
@@ -36,23 +32,14 @@ public class JFrame_Empleados extends javax.swing.JFrame {
         botonBuscar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Lista de empleados");
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel1.setText("EMPLEADOS ");
 
-        tablaempleados.setModel(new javax.swing.table.DefaultTableModel(
+        tbempleados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                { new Integer(442424), "LUIS", "LOPES",  new Integer(21), null, null, null, null, null},
-                { new Integer(242424), "MARIA", "LOPEZ",  new Integer(21), null, null, null, null, null},
-                { new Integer(242424), "JOSE", "GUITIERRES",  new Integer(32), null, null, null, null, null},
-                { new Integer(2424244), "RODRIGO", "ROMERO",  new Integer(45), null, null, null, null, null},
-                { new Integer(564564), "MIGUEL", "FLORES",  new Integer(44), null, null, null, null, null},
-                { new Integer(6755), "HELEN", "GULLEROMO",  new Integer(21), null, null, null, null, null},
-                { new Integer(45556), "LUISA", "TORRES",  new Integer(23), null, null, null, null, null},
-                { new Integer(4564645), "PEPE", "ALTARES",  new Integer(22), null, null, null, null, null},
-                { new Integer(221243), "GAEL", "SETMIS",  new Integer(32), null, null, null, null, null},
-                { new Integer(2424), "LEO", "TAMMA",  new Integer(23), null, null, null, null, null},
-                { new Integer(324234), "ETTO", "EWER",  new Integer(42), null, null, null, null, null}
+
             },
             new String [] {
                 "ID", "Nombre", "Apellidos", "Edad", "Genero", "DNI", "Telefono", "Puesto", "Tipo de Seguro"
@@ -61,14 +48,21 @@ public class JFrame_Empleados extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.Float.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, true, true, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
         });
-        tablaempleados.setColumnSelectionAllowed(true);
-        jScrollPane1.setViewportView(tablaempleados);
-        tablaempleados.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tbempleados.setColumnSelectionAllowed(true);
+        jScrollPane1.setViewportView(tbempleados);
+        tbempleados.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         botonregistrarempleado.setText("REGISTRAR NUEVO EMPLEADO");
         botonregistrarempleado.addActionListener(new java.awt.event.ActionListener() {
@@ -78,12 +72,27 @@ public class JFrame_Empleados extends javax.swing.JFrame {
         });
 
         botoneliminar.setText("ELIMINAR");
+        botoneliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botoneliminarActionPerformed(evt);
+            }
+        });
 
         botonmodificar.setText("MODIFICAR");
 
         atras.setText("ATRAS");
+        atras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                atrasActionPerformed(evt);
+            }
+        });
 
         botonBuscar.setText("BUSCAR");
+        botonBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonBuscarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -110,8 +119,8 @@ public class JFrame_Empleados extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(botonregistrarempleado, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(botonregistrarempleado)
                         .addComponent(botoneliminar)
                         .addComponent(botonmodificar)
                         .addComponent(atras)
@@ -125,8 +134,28 @@ public class JFrame_Empleados extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botonregistrarempleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonregistrarempleadoActionPerformed
-        // TODO add your handling code here:
+                  JFrame_Registrar Inicio=new JFrame_Registrar();
+             Inicio.setVisible(true);
+             dispose();
     }//GEN-LAST:event_botonregistrarempleadoActionPerformed
+
+    private void atrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atrasActionPerformed
+                  JFrame_Menu Inicio=new JFrame_Menu();
+             Inicio.setVisible(true);
+             dispose();
+    }//GEN-LAST:event_atrasActionPerformed
+
+    private void botonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBuscarActionPerformed
+            JFrame_Buscar Inicio=new JFrame_Buscar();
+             Inicio.setVisible(true);
+             dispose();
+    }//GEN-LAST:event_botonBuscarActionPerformed
+
+    private void botoneliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoneliminarActionPerformed
+          JFrame_Eliminar Eliminar=new JFrame_Eliminar();
+             Eliminar.setVisible(true);
+             dispose();
+    }//GEN-LAST:event_botoneliminarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -171,6 +200,6 @@ public class JFrame_Empleados extends javax.swing.JFrame {
     private javax.swing.JButton botonregistrarempleado;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tablaempleados;
+    private javax.swing.JTable tbempleados;
     // End of variables declaration//GEN-END:variables
 }
