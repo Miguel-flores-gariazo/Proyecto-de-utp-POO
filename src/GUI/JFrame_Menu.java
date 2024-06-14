@@ -4,10 +4,9 @@
  */
 package GUI;
 
-/**
- *
- * @author KB
- */
+import Controlador.controlador_JF_Accidentes;
+
+
 public class JFrame_Menu extends javax.swing.JFrame {
 
     /**
@@ -156,7 +155,7 @@ public class JFrame_Menu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+    
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -192,10 +191,8 @@ public class JFrame_Menu extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new JFrame_Menu().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new JFrame_Menu().setVisible(true);
         });
     }
 
