@@ -4,6 +4,8 @@
  */
 package GUI;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author KB
@@ -189,7 +191,7 @@ public class JFrame_Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jbtmregistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtmregistrarActionPerformed
-           JFrame_Registrar Inicio=new JFrame_Registrar();
+           JFrame_Registrar Inicio=new JFrame_Registrar(new ArrayList<>());
              Inicio.setVisible(true);
              dispose();
     }//GEN-LAST:event_jbtmregistrarActionPerformed

@@ -1,22 +1,21 @@
 package GUI;
-import JcheckBox.CheckBoxColumn;
-import javax.swing.JFrame;
-import javax.swing.JTable;
-import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import plazavea.empleados.Empleado;
+ //FUNCIONA NO BORRAR
 public class JFrame_Buscar extends javax.swing.JFrame {
-private HashMap<String, Empleado> empleadosMap; // HashMap para buscar empleados
-    double contador;
-    int intentos = 0;
+    private HashMap<String, Empleado> empleadosMap; // HashMap para buscar empleados
+    private ArrayList<Empleado> listaEmpleados; // Lista de empleados para manejar el original
 
-   
-    public JFrame_Buscar() {
+    public JFrame_Buscar(ArrayList<Empleado> empleados) {
+        this.listaEmpleados = empleados; // Recibimos la lista de empleados desde JFrame_Empleados
+        this.empleadosMap = new HashMap<>(); // Inicializamos el HashMap
         initComponents();
-        empleadosMap = new HashMap<>(); // Inicializamos el HashMap
-        mostrarPersonas();
+        llenarEmpleadosMap();
+        mostrarEmpleados();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
     @SuppressWarnings("unchecked")
@@ -29,9 +28,9 @@ private HashMap<String, Empleado> empleadosMap; // HashMap para buscar empleados
         jLabel3 = new javax.swing.JLabel();
         txt_buscar = new javax.swing.JTextField();
         btbuscar = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tabla = new javax.swing.JTable();
         btn_Eliminar = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tbempleados = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -62,25 +61,53 @@ private HashMap<String, Empleado> empleadosMap; // HashMap para buscar empleados
             }
         });
 
-        tabla.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(tabla);
-
         btn_Eliminar.setText("Eliminar");
         btn_Eliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_EliminarActionPerformed(evt);
             }
         });
+
+        tbempleados.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Nombre", "Apellido_Paterno", "Apellido_Materno", "Edad", "Genero", "DNI", "Telefono", "Puesto", "Tipo de Seguro", "Fecha de Nacimiento", "Correo", "Estado Civil", "Nacionalidad"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tbempleados);
+        if (tbempleados.getColumnModel().getColumnCount() > 0) {
+            tbempleados.getColumnModel().getColumn(0).setResizable(false);
+            tbempleados.getColumnModel().getColumn(1).setResizable(false);
+            tbempleados.getColumnModel().getColumn(2).setResizable(false);
+            tbempleados.getColumnModel().getColumn(3).setResizable(false);
+            tbempleados.getColumnModel().getColumn(4).setResizable(false);
+            tbempleados.getColumnModel().getColumn(5).setResizable(false);
+            tbempleados.getColumnModel().getColumn(6).setResizable(false);
+            tbempleados.getColumnModel().getColumn(7).setResizable(false);
+            tbempleados.getColumnModel().getColumn(8).setResizable(false);
+            tbempleados.getColumnModel().getColumn(9).setResizable(false);
+            tbempleados.getColumnModel().getColumn(10).setResizable(false);
+            tbempleados.getColumnModel().getColumn(11).setResizable(false);
+            tbempleados.getColumnModel().getColumn(12).setResizable(false);
+            tbempleados.getColumnModel().getColumn(13).setResizable(false);
+        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -90,35 +117,35 @@ private HashMap<String, Empleado> empleadosMap; // HashMap para buscar empleados
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(regresar)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(regresar))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(90, 90, 90)
+                        .addComponent(titulo))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(datos, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(90, 90, 90)
-                                .addComponent(titulo))
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(datos, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel3)
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addGap(18, 18, 18)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(btbuscar)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(btn_Eliminar))
-                                            .addComponent(txt_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)))
-                .addContainerGap())
+                                        .addComponent(btbuscar)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btn_Eliminar))
+                                    .addComponent(txt_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 732, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(titulo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -133,126 +160,122 @@ private HashMap<String, Empleado> empleadosMap; // HashMap para buscar empleados
                             .addComponent(btn_Eliminar))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(regresar)
-                        .addGap(19, 19, 19))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(78, Short.MAX_VALUE))))
+                        .addGap(19, 19, 19))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-             Empleado.setVisible(true);
-             dispose();
     private void regresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regresarActionPerformed
         JFrame_Empleados Empleado=new JFrame_Empleados();
              Empleado.setVisible(true);
              dispose();
     }//GEN-LAST:event_regresarActionPerformed
 
+    private void eliminarEmpleado() {
+        int selectedRow = tbempleados.getSelectedRow();
+        if (selectedRow != -1) {
+            String dni = tbempleados.getValueAt(selectedRow, 5).toString();
+            Empleado empleado = empleadosMap.get(dni);
+            if (empleado != null) {
+                listaEmpleados.remove(empleado);
+                empleadosMap.remove(dni);
+                ((DefaultTableModel) tbempleados.getModel()).removeRow(selectedRow);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione una fila para eliminar", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    
+    private void llenarEmpleadosMap() {
+        empleadosMap.clear();
+        for (Empleado emp : listaEmpleados) {
+            empleadosMap.put(emp.getDni(), emp);
+        }
+    }
+
+        private void mostrarEmpleados() {
+        DefaultTableModel model = (DefaultTableModel) tbempleados.getModel();
+        model.setRowCount(0);
+        for (Empleado emp : listaEmpleados) {
+            model.addRow(new Object[]{
+                emp.getNombre(), emp.getApellido_Paterno(), emp.getApellido_Materno(), emp.getEdad(), emp.getGenero(),
+                emp.getDni(), emp.getTelefono(), emp.getPuesto(), emp.getTipoSeguro()
+            });
+        }
+    }
+        
+      private void buscarPersona(String buscar) {
+    if (buscar == null || buscar.trim().isEmpty()) {
+        mostrarEmpleados();
+        return;
+    }
+
+    DefaultTableModel model = new DefaultTableModel();
+    model.addColumn("ID");
+    model.addColumn("Nombre");
+    model.addColumn("Apellido_Paterno");
+    model.addColumn("Apellido_Materno");
+    model.addColumn("Edad");
+    model.addColumn("Género");
+    model.addColumn("DNI");
+    model.addColumn("Teléfono");
+    model.addColumn("Puesto");
+    model.addColumn("Tipo de Seguro");
+
+    boolean encontrado = false;
+
+    // Primero intentamos buscar por DNI
+    Empleado empleadoPorDNI = empleadosMap.get(buscar);
+    if (empleadoPorDNI != null) {
+        model.addRow(new Object[]{
+            empleadoPorDNI.getNombre(), empleadoPorDNI.getApellido_Paterno(), empleadoPorDNI.getApellido_Materno(), empleadoPorDNI.getApellido_Materno(), empleadoPorDNI.getApellido_Materno(), empleadoPorDNI.getEdad(), empleadoPorDNI.getGenero(),
+            empleadoPorDNI.getDni(), empleadoPorDNI.getTelefono(), empleadoPorDNI.getPuesto(), empleadoPorDNI.getTipoSeguro()
+        });
+        encontrado = true;
+    }
+
+    // Si no se encontró por DNI, buscamos por nombre en toda la lista
+    if (!encontrado) {
+        for (Empleado emp : listaEmpleados) {
+            if (emp.getNombre().equalsIgnoreCase(buscar)) {
+                model.addRow(new Object[]{
+                    emp.getNombre(), emp.getApellido_Paterno(), emp.getApellido_Materno(), emp.getEdad(), emp.getGenero(),
+                    emp.getDni(), emp.getTelefono(), emp.getPuesto(), emp.getTipoSeguro()
+                });
+                encontrado = true;
+            }
+        }
+    }
+
+    if (!encontrado) {
+        JOptionPane.showMessageDialog(this, "No se encontró ningún empleado con el término de búsqueda proporcionado.", "Información", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    tbempleados.setModel(model);
+}
+   
+        
     private void btbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btbuscarActionPerformed
       buscarPersona(txt_buscar.getText());
       
     }//GEN-LAST:event_btbuscarActionPerformed
 
     private void btn_EliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_EliminarActionPerformed
-               Logica logica = new Logica();
-
-        long tiempo_inicial = System.currentTimeMillis();
-
-        System.out.println("inicio"+tiempo_inicial);
-
-        for (int i = 0; i < tabla.getRowCount(); i++)
-        {
-            if  ( CheckBoxColumn.IsSelected(i, 4, tabla))
-            {
-                logica.eliminarRegistro(Integer.parseInt(tabla.getValueAt(i, 1).toString()));
-            }
-        }
-
-        mostrarPersonas();
-
-        long tiempo_final = System.currentTimeMillis();
-        System.out.println("consumido total seguntos = "+((double)(tiempo_final-tiempo_inicial)/1000));
-
-        contador += ((double)(tiempo_final-tiempo_inicial)/1000);
-        intentos ++;
-
-        System.out.println(contador+"  "+intentos);
+         eliminarEmpleado();
     }//GEN-LAST:event_btn_EliminarActionPerformed
 
     private void txt_buscarActionPerformed(java.awt.event.ActionEvent evt) {                                           
-       
-        buscarPersona(txt_buscar.getText());
-
+           buscarPersona(txt_buscar.getText());
     }                                      
-
-    public void mostrarPersonas()
-    {
-        Logica logica = new Logica();
-        DefaultTableModel modelo = logica.mostrarPersonas();
-        tabla.setModel(modelo);
-        CheckBoxColumn checkBoxColumn = new CheckBoxColumn();
-        checkBoxColumn.addCheckBox(4, tabla);
-        
-        // Llenar el HashMap con los datos de la tabla
-        llenarEmpleadosMap(modelo);
-            
-    }
     
-        private void llenarEmpleadosMap(DefaultTableModel modelo) {
-        empleadosMap.clear(); // Limpiar el HashMap antes de llenarlo nuevamente
-        for (int i = 0; i < modelo.getRowCount(); i++) {
-            String dni = modelo.getValueAt(i, 5).toString(); // Asumiendo que el DNI está en la columna 5
-            String nombre = modelo.getValueAt(i, 1).toString(); // Asumiendo que el nombre está en la columna 1
-            Empleado empleado = new Empleado(
-                Integer.parseInt(modelo.getValueAt(i, 0).toString()), // ID
-                modelo.getValueAt(i, 1).toString(), // Nombre
-                modelo.getValueAt(i, 2).toString(), // Apellidos
-                Integer.parseInt(modelo.getValueAt(i, 3).toString()), // Edad
-                modelo.getValueAt(i, 4).toString(), // Género
-                dni, // DNI
-                modelo.getValueAt(i, 6).toString() // Otros atributos si hay más
-            );
-            empleadosMap.put(dni, empleado);
-            empleadosMap.put(nombre, empleado);
-        }
-    }
-
-    
-        public void buscarPersona(String buscar) {
-        DefaultTableModel modelo = new DefaultTableModel();
-        modelo.addColumn("ID");
-        modelo.addColumn("Nombre");
-        modelo.addColumn("Apellidos");
-        modelo.addColumn("Edad");
-        modelo.addColumn("Género");
-        modelo.addColumn("DNI");
-        modelo.addColumn("Otros");
-
-        Empleado empleado = empleadosMap.get(buscar);
-        if (empleado != null) {
-            modelo.addRow(new Object[]{
-                empleado.getId(),
-                empleado.getNombre(),
-                empleado.getApellidos(),
-                empleado.getEdad(),
-                empleado.getGenero(),
-                empleado.getDni(),
-                empleado.getOtros()
-            });
-        }
-
-        tabla.setModel(modelo);
-        CheckBoxColumn checkBoxColumn = new CheckBoxColumn();
-        checkBoxColumn.addCheckBox(4, tabla);
-    }                              
-
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
+     java.awt.EventQueue.invokeLater(() -> new JFrame_Buscar(new ArrayList<>()).setVisible(true));
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
@@ -277,7 +300,6 @@ private HashMap<String, Empleado> empleadosMap; // HashMap para buscar empleados
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new JFrame_Buscar().setVisible(true);
         });
     }
 
@@ -288,7 +310,7 @@ private HashMap<String, Empleado> empleadosMap; // HashMap para buscar empleados
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton regresar;
-    private javax.swing.JTable tabla;
+    private javax.swing.JTable tbempleados;
     private javax.swing.JLabel titulo;
     private javax.swing.JTextField txt_buscar;
     // End of variables declaration//GEN-END:variables
