@@ -5,18 +5,17 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.table.DefaultTableModel;
-import java.util.HashMap;
 
 public class registroAccidente extends javax.swing.JFrame {
     
     private Accidente accidente;
     
-    private final HashMap<String, Accidente> listaAccidentes;
+    private final ArrayList<Accidente> listaAccidentes;
     private final DefaultTableModel modeloTabla;
     
     public registroAccidente() {
         initComponents();
-        listaAccidentes = new HashMap<>();
+        listaAccidentes = new ArrayList<>();
         modeloTabla = new DefaultTableModel(new Object[]{"ID", "Tipo Documento", "N° Documento", "Nombres", "Apellidos", "Fecha Nacimiento", "Sexo", "Fecha Accidente", "Tipo Accidente", "Descripción"}, 0);
         jTable1.setModel(modeloTabla);
 
@@ -40,19 +39,19 @@ public class registroAccidente extends javax.swing.JFrame {
     Date fechaNacimiento = jDateChooser2.getDate();
 
     if (!idEmpleado.isEmpty() && !numeroDocumento.isEmpty() && !nombres.isEmpty()) {
-        // Crear un nuevo objeto Accidente con los datos ingresados
-        Accidente accidente = new Accidente(idEmpleado, tipoDocumento, numeroDocumento, nombres, apellidos, sexo, tipoAccidente, descripcion, fechaAccidente, fechaNacimiento);
+            // Crear un nuevo objeto Accidente con los datos ingresados
+            Accidente accidente = new Accidente(idEmpleado, tipoDocumento, numeroDocumento, nombres, apellidos, sexo, tipoAccidente, descripcion, fechaAccidente, fechaNacimiento);
 
-        // Agregar el accidente al mapa
-        listaAccidentes.put(numeroDocumento, accidente);
+            // Agregar el accidente a la lista
+            listaAccidentes.add(accidente);
 
-        // Actualizar la tabla con el nuevo accidente
-        Object[] rowData = {idEmpleado, tipoDocumento, numeroDocumento, nombres, apellidos, fechaNacimiento, sexo, fechaAccidente, tipoAccidente, descripcion};
-        modeloTabla.addRow(rowData);
+            // Actualizar la tabla con el nuevo accidente
+            Object[] rowData = {idEmpleado, tipoDocumento, numeroDocumento, nombres, apellidos, fechaNacimiento, sexo, fechaAccidente, tipoAccidente, descripcion};
+            modeloTabla.addRow(rowData);
 
-        // Limpiar los campos del formulario
-        limpiarCampos();
-    }
+            // Limpiar los campos del formulario
+            limpiarCampos();
+        }
 }
     
     private void limpiarCampos() {
@@ -277,7 +276,15 @@ public class registroAccidente extends javax.swing.JFrame {
             new String [] {
                 "ID", "TIPO DE DOCUMENTO", "N° DOCUMENTO", "NOMBRES", "APELLIDOS", "FECHA DE NACIMIENTO", "SEXO", "FECHA DE ACCIDENTE", "GRAVEDAD DE ACCIDENTE", "DESCRIPCION"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.Object.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
