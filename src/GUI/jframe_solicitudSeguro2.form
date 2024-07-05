@@ -86,10 +86,7 @@
                                       <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
                                       <Component id="jLabel15" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="tex_depa" min="-2" pref="156" max="-2" attributes="0"/>
-                                  </Group>
+                                  <Component id="tex_depa" alignment="0" min="-2" pref="156" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -165,7 +162,7 @@
                       <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
                       <Component id="botonsalir" min="-2" pref="63" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
-                      <Component id="botonfinalizar" min="-2" pref="85" max="-2" attributes="0"/>
+                      <Component id="botonEnviar" min="-2" pref="85" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -278,11 +275,13 @@
                   <Component id="jLabel18" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="tex_depa" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="tex_distr" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="tex_direc" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="texpais" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="tex_distr" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="tex_direc" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="texpais" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
               <Component id="cuartodato" min="-2" pref="28" max="-2" attributes="0"/>
@@ -308,7 +307,7 @@
                   <Component id="tex_fecha" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="botonatras" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="botonsalir" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="botonfinalizar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="botonEnviar" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="25" max="32767" attributes="0"/>
           </Group>
@@ -411,9 +410,6 @@
     <Component class="javax.swing.JTextField" name="tex_numdoc2">
     </Component>
     <Component class="javax.swing.JTextField" name="tex_apellidomayo">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tex_apellidomayoActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel10">
       <Properties>
@@ -517,9 +513,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="DIVORCIO"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="boton_divorcioActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="boton_porsolicitud">
       <Properties>
@@ -559,10 +552,13 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonsalirActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="botonfinalizar">
+    <Component class="javax.swing.JButton" name="botonEnviar">
       <Properties>
-        <Property name="text" type="java.lang.String" value="FINALIZAR"/>
+        <Property name="text" type="java.lang.String" value="ENVIAR"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonEnviarActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

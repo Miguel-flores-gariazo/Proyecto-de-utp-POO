@@ -244,7 +244,7 @@ public class JFrame_Empleados extends javax.swing.JFrame{
     }//GEN-LAST:event_atrasActionPerformed
 
     private void botonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBuscarActionPerformed
-        JFrame_Buscar buscarFrame = new JFrame_Buscar(listaEmpleados);
+        JFrame_Buscar buscarFrame = new JFrame_gestorsolicitud(listaEmpleados);
         buscarFrame.setVisible(true);
         dispose();
     }//GEN-LAST:event_botonBuscarActionPerformed
