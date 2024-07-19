@@ -1,22 +1,21 @@
 package GUI;
+
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
-import java.util.HashMap;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import plazavea.empleados.Empleado;
- //FUNCIONA NO BORRAR
-public class JFrame_Buscar extends javax.swing.JFrame {
-    private HashMap<String, Empleado> empleadosMap; // HashMap para buscar empleados
-    private ArrayList<Empleado> listaEmpleados; // Lista de empleados para manejar el original
 
-    public JFrame_Buscar(ArrayList<Empleado> empleados) {
-        this.listaEmpleados = empleados; // Recibimos la lista de empleados desde JFrame_Empleados
-        this.empleadosMap = new HashMap<>(); // Inicializamos el HashMap
+
+public class JFrame_Buscar extends javax.swing.JFrame {
+    
+     private ArrayList<Empleado> listaEmpleados;
+    private DefaultTableModel modeloTabla;
+    
+    public JFrame_Buscar(ArrayList<Empleado> listaEmpleados) {
+    this.listaEmpleados = listaEmpleados;
         initComponents();
-        llenarEmpleadosMap();
-        mostrarEmpleados();
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        modeloTabla = (DefaultTableModel) tbempleados.getModel(); // Inicializar modeloTabla
+        cargarDatosTabla();
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -73,14 +72,14 @@ public class JFrame_Buscar extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Nombre", "Apellido_Paterno", "Apellido_Materno", "Edad", "Genero", "DNI", "Telefono", "Puesto", "Tipo de Seguro", "Fecha de Nacimiento", "Correo", "Estado Civil", "Nacionalidad"
+                "Nombre", "Apellido_Paterno", "Apellido_Materno", "Edad", "Genero", "DNI", "Telefono", "Puesto", "Tipo de Seguro", "Correo", "Estado Civil", "Fecha de Nacimiento", "Nacionalidad"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -106,7 +105,6 @@ public class JFrame_Buscar extends javax.swing.JFrame {
             tbempleados.getColumnModel().getColumn(10).setResizable(false);
             tbempleados.getColumnModel().getColumn(11).setResizable(false);
             tbempleados.getColumnModel().getColumn(12).setResizable(false);
-            tbempleados.getColumnModel().getColumn(13).setResizable(false);
         }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -119,24 +117,26 @@ public class JFrame_Buscar extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(regresar))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(90, 90, 90)
-                        .addComponent(titulo))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(datos, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGap(90, 90, 90)
+                                .addComponent(titulo))
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(datos, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(btbuscar)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(btn_Eliminar))
-                                    .addComponent(txt_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 732, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                                        .addComponent(jLabel3)
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(btbuscar)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(btn_Eliminar))
+                                            .addComponent(txt_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 774, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -145,7 +145,7 @@ public class JFrame_Buscar extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(60, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(titulo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -166,96 +166,13 @@ public class JFrame_Buscar extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    
     private void regresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regresarActionPerformed
         JFrame_Empleados Empleado=new JFrame_Empleados();
              Empleado.setVisible(true);
              dispose();
     }//GEN-LAST:event_regresarActionPerformed
-
-    private void eliminarEmpleado() {
-        int selectedRow = tbempleados.getSelectedRow();
-        if (selectedRow != -1) {
-            String dni = tbempleados.getValueAt(selectedRow, 5).toString();
-            Empleado empleado = empleadosMap.get(dni);
-            if (empleado != null) {
-                listaEmpleados.remove(empleado);
-                empleadosMap.remove(dni);
-                ((DefaultTableModel) tbempleados.getModel()).removeRow(selectedRow);
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Seleccione una fila para eliminar", "Advertencia", JOptionPane.WARNING_MESSAGE);
-        }
-    }
-
-    
-    private void llenarEmpleadosMap() {
-        empleadosMap.clear();
-        for (Empleado emp : listaEmpleados) {
-            empleadosMap.put(emp.getDni(), emp);
-        }
-    }
-
-        private void mostrarEmpleados() {
-        DefaultTableModel model = (DefaultTableModel) tbempleados.getModel();
-        model.setRowCount(0);
-        for (Empleado emp : listaEmpleados) {
-            model.addRow(new Object[]{
-                emp.getNombre(), emp.getApellido_Paterno(), emp.getApellido_Materno(), emp.getEdad(), emp.getGenero(),
-                emp.getDni(), emp.getTelefono(), emp.getPuesto(), emp.getTipoSeguro()
-            });
-        }
-    }
-        
-      private void buscarPersona(String buscar) {
-    if (buscar == null || buscar.trim().isEmpty()) {
-        mostrarEmpleados();
-        return;
-    }
-
-    DefaultTableModel model = new DefaultTableModel();
-    model.addColumn("ID");
-    model.addColumn("Nombre");
-    model.addColumn("Apellido_Paterno");
-    model.addColumn("Apellido_Materno");
-    model.addColumn("Edad");
-    model.addColumn("Género");
-    model.addColumn("DNI");
-    model.addColumn("Teléfono");
-    model.addColumn("Puesto");
-    model.addColumn("Tipo de Seguro");
-
-    boolean encontrado = false;
-
-    // Primero intentamos buscar por DNI
-    Empleado empleadoPorDNI = empleadosMap.get(buscar);
-    if (empleadoPorDNI != null) {
-        model.addRow(new Object[]{
-            empleadoPorDNI.getNombre(), empleadoPorDNI.getApellido_Paterno(), empleadoPorDNI.getApellido_Materno(), empleadoPorDNI.getApellido_Materno(), empleadoPorDNI.getApellido_Materno(), empleadoPorDNI.getEdad(), empleadoPorDNI.getGenero(),
-            empleadoPorDNI.getDni(), empleadoPorDNI.getTelefono(), empleadoPorDNI.getPuesto(), empleadoPorDNI.getTipoSeguro()
-        });
-        encontrado = true;
-    }
-
-    // Si no se encontró por DNI, buscamos por nombre en toda la lista
-    if (!encontrado) {
-        for (Empleado emp : listaEmpleados) {
-            if (emp.getNombre().equalsIgnoreCase(buscar)) {
-                model.addRow(new Object[]{
-                    emp.getNombre(), emp.getApellido_Paterno(), emp.getApellido_Materno(), emp.getEdad(), emp.getGenero(),
-                    emp.getDni(), emp.getTelefono(), emp.getPuesto(), emp.getTipoSeguro()
-                });
-                encontrado = true;
-            }
-        }
-    }
-
-    if (!encontrado) {
-        JOptionPane.showMessageDialog(this, "No se encontró ningún empleado con el término de búsqueda proporcionado.", "Información", JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    tbempleados.setModel(model);
-}
-   
         
     private void btbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btbuscarActionPerformed
       buscarPersona(txt_buscar.getText());
@@ -270,37 +187,57 @@ public class JFrame_Buscar extends javax.swing.JFrame {
            buscarPersona(txt_buscar.getText());
     }                                      
     
+    
+ private void cargarDatosTabla() {
+    if (modeloTabla != null) {
+        modeloTabla.setRowCount(0); // Limpiar la tabla antes de cargar nuevos datos
+        for (Empleado emp : listaEmpleados) {
+            modeloTabla.addRow(new Object[]{
+                emp.getNombre(), emp.getApellido_Paterno(), emp.getApellido_Materno(),
+                emp.getEdad(), emp.getGenero(), emp.getDni(), emp.getTelefono(),
+                emp.getPuesto(), emp.getTipoSeguro(), emp.getGmail(),
+                emp.getEcivil(), emp.getFechaN(), emp.getNacionalidad()
+            });
+        }
+    } else {
+        System.err.println("modeloTabla es nulo en cargarDatosTabla()");
+    
+    }
+}
+    
+    private void buscarPersona(String criterio) {
+        modeloTabla.setRowCount(0); // Limpiar la tabla
+        for (Empleado emp : listaEmpleados) {
+            if (emp.getDni().equalsIgnoreCase(criterio) || emp.getNombre().equalsIgnoreCase(criterio)) {
+                modeloTabla.addRow(new Object[]{
+                    emp.getNombre(), emp.getApellido_Paterno(), emp.getApellido_Materno(), emp.getEdad(),
+                    emp.getGenero(), emp.getDni(), emp.getTelefono(), emp.getPuesto(),
+                    emp.getTipoSeguro(), emp.getGmail(), emp.getEcivil(),
+                    emp.getFechaN(), emp.getNacionalidad()
+                });
+            }
+        }
+    }
+
+    private void eliminarEmpleado() {
+        int selectedRow = tbempleados.getSelectedRow();
+        if (selectedRow != -1) {
+            String dni = (String) modeloTabla.getValueAt(selectedRow, 5);
+            listaEmpleados.removeIf(emp -> emp.getDni().equals(dni));
+            modeloTabla.removeRow(selectedRow);
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione un empleado para eliminar.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        cargarDatosTabla();
+    }
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
      java.awt.EventQueue.invokeLater(() -> new JFrame_Buscar(new ArrayList<>()).setVisible(true));
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JFrame_Buscar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JFrame_Buscar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JFrame_Buscar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JFrame_Buscar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> {
-        });
+ 
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -66,7 +66,7 @@
                           <Component id="txt_buscar" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="btbuscar" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="btn_Eliminar" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>

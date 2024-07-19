@@ -3,6 +3,7 @@ package GUI;
 import plazavea.solicitudseguro.SolicitudSeguroSalud;
 
 import javax.swing.JOptionPane;
+import javax.swing.ButtonGroup;
 
 public class JFrame_Solicitudaseguro01 extends javax.swing.JFrame {
     
@@ -11,6 +12,13 @@ private SolicitudSeguroSalud solicitud;
     public JFrame_Solicitudaseguro01() {
         initComponents();
         
+         buttonGroup1.add(boton_hombre);
+        buttonGroup1.add(boton_nujer);
+        buttonGroup2.add(boton_solter);
+        buttonGroup2.add(boton_casad);
+        buttonGroup2.add(boton_divorciad);
+        buttonGroup2.add(boton_viudo);
+         
     }
  private boolean validarCampos() {
         // Validar campo de razon social (empresa)
@@ -90,7 +98,24 @@ private SolicitudSeguroSalud solicitud;
         JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
     } 
      
-     
+     private void guardarDatos() {
+        // Assuming SolicitudSeguroSalud has a suitable constructor or setters for all fields
+        solicitud = new SolicitudSeguroSalud(
+                tex_razonsocial.getText().trim(),
+                tex_numeroruc.getText().trim(),
+                tex_apellidoP.getText().trim(),
+                tex_apellidoM.getText().trim(),
+                tex_nombres.getText().trim(),
+                combox_tipodocu.getSelectedItem().toString(),
+                tex_numero.getText().trim(),
+                tex_fecha.getText().trim(),
+                boton_hombre.isSelected() ? "Hombre" : "Mujer",
+                boton_solter.isSelected() ? "Soltero(a)" : boton_casad.isSelected() ? "Casado(a)" : boton_divorciad.isSelected() ? "Divorciado(a)" : "Viudo(a)",
+                tex_numertelefono.getText().trim(),
+                tex_gmail.getText().trim(),
+                tex_direccion.getText().trim()
+        );
+     }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -226,9 +251,9 @@ private SolicitudSeguroSalud solicitud;
                 .addGap(162, 162, 162))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(boton_volver)
-                .addGap(35, 35, 35)
-                .addComponent(boton_siguiente)
+                .addComponent(boton_volver, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(boton_siguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -415,11 +440,22 @@ private SolicitudSeguroSalud solicitud;
     }// </editor-fold>//GEN-END:initComponents
 
     private void boton_volverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_volverActionPerformed
-        // TODO add your handling code here:
+      int confirmacion = JOptionPane.showConfirmDialog(this, "¿Está seguro de que desea volver al menú? Se perderán todos los datos no guardados.", "Confirmación", JOptionPane.YES_NO_OPTION);
+    if (confirmacion == JOptionPane.YES_OPTION) {
+        // Crear instancia del JFrame_menu
+        JFrame_Menu menu = new JFrame_Menu();
+        // Hacer visible el JFrame_menu
+        menu.setVisible(true);
+        // Cerrar el JFrame actual
+        this.dispose();
+    } 
     }//GEN-LAST:event_boton_volverActionPerformed
 
     private void boton_siguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_siguienteActionPerformed
-if (validarCampos()) {
+     if (validarCampos()) {
+      guardarDatos();
+            JOptionPane.showMessageDialog(this, "Datos guardados correctamente.", "Información", JOptionPane.INFORMATION_MESSAGE);
+    
             // Si los campos están validados correctamente, procedemos a guardar los datos en la instancia de SolicitudSeguroSalud
             String razonSocial = tex_razonsocial.getText().trim();
             String ruc = tex_numeroruc.getText().trim();
@@ -443,9 +479,12 @@ if (validarCampos()) {
             // Mostrar los datos en consola para verificar
             System.out.println(solicitud);
 
-            // Lógica para pasar a la siguiente pantalla o guardar los datos
-            // Por ejemplo, abrir otro JFrame o guardar los datos en una base de datos
-       }
+        jframe_solicitudSeguro2 siguienteVentana = new jframe_solicitudSeguro2();
+        // Hacer visible el JFrame_Solicitudaseguro2
+        siguienteVentana.setVisible(true);
+        // Cerrar el JFrame actual
+        this.dispose();
+    }
     }//GEN-LAST:event_boton_siguienteActionPerformed
 
     /**
@@ -501,4 +540,5 @@ if (validarCampos()) {
     private javax.swing.JTextField tex_razonsocial;
     private javax.swing.JLabel tipodocu;
     // End of variables declaration//GEN-END:variables
+
 }

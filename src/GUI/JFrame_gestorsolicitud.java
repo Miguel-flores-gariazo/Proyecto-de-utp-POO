@@ -1,11 +1,10 @@
+
 package GUI;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import plazavea.solicitudseguro.SolicitudSeguroSalud;
-
 
 public class JFrame_gestorsolicitud extends javax.swing.JFrame {
     private HashMap<String, SolicitudSeguroSalud> solicitudesMap;
@@ -138,7 +137,7 @@ public class JFrame_gestorsolicitud extends javax.swing.JFrame {
                             .addComponent(jLabel3)
                             .addComponent(txt_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btbuscar)
                             .addComponent(btn_Eliminar))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -227,7 +226,7 @@ public class JFrame_gestorsolicitud extends javax.swing.JFrame {
                     encontrado = true;
                 }
             }
-        } }
+        } 
     
 
     if (!encontrado) {
@@ -284,7 +283,6 @@ public class JFrame_gestorsolicitud extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
         });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btbuscar;
@@ -296,4 +294,5 @@ public class JFrame_gestorsolicitud extends javax.swing.JFrame {
     private javax.swing.JLabel titulo;
     private javax.swing.JTextField txt_buscar;
     // End of variables declaration//GEN-END:variables
+
 }

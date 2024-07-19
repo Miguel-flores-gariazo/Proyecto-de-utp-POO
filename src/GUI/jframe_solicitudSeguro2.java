@@ -1,13 +1,30 @@
 package GUI;
 
-
+import javax.swing.JOptionPane;
+import plazavea.solicitudseguro.Repositorio;
+import plazavea.solicitudseguro.SolicitudSeguroSalud2;
 
 public class jframe_solicitudSeguro2 extends javax.swing.JFrame {
 
-  
+  private Repositorio repositorio;
 
     public jframe_solicitudSeguro2() {
         initComponents();
+        
+         repositorio = new Repositorio();
+        
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroup2 = new javax.swing.ButtonGroup();
+        
+       buttonGroup1.add(boton_incrip);
+        buttonGroup1.add(boton_baja);
+        buttonGroup1.add(boton_modificacion);
+        
+        
+        buttonGroup2.add(boton_divorcio);
+        buttonGroup2.add(boton_fallecimiento);
+        buttonGroup2.add(boton_porotros);  
+        
     }
     
     @SuppressWarnings("unchecked")
@@ -60,7 +77,7 @@ public class jframe_solicitudSeguro2 extends javax.swing.JFrame {
         tex_fecha = new javax.swing.JTextField();
         botonatras = new javax.swing.JButton();
         botonsalir = new javax.swing.JButton();
-        botonEnviar = new javax.swing.JButton();
+        botonFinalizar = new javax.swing.JButton();
 
         jLabel12.setFont(new java.awt.Font("Stencil", 0, 12)); // NOI18N
         jLabel12.setText("edad:");
@@ -140,6 +157,11 @@ public class jframe_solicitudSeguro2 extends javax.swing.JFrame {
         fachafv_falle.setText("FECHA DE FIN DE VINCULO/FALLECIMIENTO:");
 
         botonatras.setText("ATRAS");
+        botonatras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonatrasActionPerformed(evt);
+            }
+        });
 
         botonsalir.setText("SALIR");
         botonsalir.addActionListener(new java.awt.event.ActionListener() {
@@ -148,10 +170,10 @@ public class jframe_solicitudSeguro2 extends javax.swing.JFrame {
             }
         });
 
-        botonEnviar.setText("ENVIAR");
-        botonEnviar.addActionListener(new java.awt.event.ActionListener() {
+        botonFinalizar.setText("FINALIZAR");
+        botonFinalizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonEnviarActionPerformed(evt);
+                botonFinalizarActionPerformed(evt);
             }
         });
 
@@ -244,11 +266,11 @@ public class jframe_solicitudSeguro2 extends javax.swing.JFrame {
                         .addGap(64, 64, 64)
                         .addComponent(tex_fecha, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(botonatras, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(31, 31, 31)
-                        .addComponent(botonsalir, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30)
-                        .addComponent(botonEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(botonatras, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(botonsalir, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(botonFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -364,7 +386,7 @@ public class jframe_solicitudSeguro2 extends javax.swing.JFrame {
                     .addComponent(tex_fecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(botonatras)
                     .addComponent(botonsalir)
-                    .addComponent(botonEnviar))
+                    .addComponent(botonFinalizar))
                 .addContainerGap(25, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
@@ -379,15 +401,81 @@ public class jframe_solicitudSeguro2 extends javax.swing.JFrame {
     
     private void botonsalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonsalirActionPerformed
       
+         int respuesta = JOptionPane.showConfirmDialog(this, "¿Desea finalizar?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (respuesta == JOptionPane.YES_OPTION) {
+            new JFrame_Menu().setVisible(true);
+            this.dispose();
+        }
     }//GEN-LAST:event_botonsalirActionPerformed
-
-    private void botonEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEnviarActionPerformed
-        // TODO add your handling code here:
+    
+    
+    
+    private void botonFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonFinalizarActionPerformed
         
-    }//GEN-LAST:event_botonEnviarActionPerformed
+       try {
+            validarSeleccionUnica(buttonGroup1);
+            validarSeleccionUnica(buttonGroup2);
+            validarCamposConyugeHijo();
+            guardarDatos();
+            JOptionPane.showMessageDialog(this, "Formulario enviado correctamente.");
+            new JFrame_gestorsolicitud().setVisible(true);
+            this.dispose();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        
+    }//GEN-LAST:event_botonFinalizarActionPerformed
 
+    private void botonatrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonatrasActionPerformed
+        
+        int respuesta = JOptionPane.showConfirmDialog(this, "¿Seguro que quieres ir atrás?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (respuesta == JOptionPane.YES_OPTION) {
+            new JFrame_Solicitudaseguro01().setVisible(true);
+            this.dispose();
+        } 
+    }//GEN-LAST:event_botonatrasActionPerformed
+    private void validarSeleccionUnica(javax.swing.ButtonGroup grupo) throws Exception {
+        if (grupo.getSelection() == null) {
+            throw new Exception("Debe seleccionar una opción en cada grupo de botones.");
+        }
+    }
+
+    private void validarCamposConyugeHijo() throws Exception {
+        String nombreConyuge = tex_nombreconyu.getText().trim();
+        String apellidoConyuge = tex_apeconyu.getText().trim();
+        String nombreHijo = tex_nomhijoma.getText().trim();
+        if (nombreConyuge.isEmpty() || apellidoConyuge.isEmpty() || nombreHijo.isEmpty()) {
+            throw new Exception("Los campos de cónyuge e hijo no pueden estar vacíos.");
+        }
+    }
+    
+     private void guardarDatos() {
+        SolicitudSeguroSalud2 solicitud = new SolicitudSeguroSalud2();
+        solicitud.setNombreConyuge(tex_nombreconyu.getText().trim());
+        solicitud.setApellidoConyuge(tex_apeconyu.getText().trim());
+        solicitud.setTipoDocumentoConyuge((String) comobox_numerodocu.getSelectedItem());
+        solicitud.setNumeroDocumentoConyuge(tex_numer.getText().trim());
+        solicitud.setNombreHijo(tex_nomhijoma.getText().trim());
+        solicitud.setApellidoHijo(tex_apellidomayo.getText().trim());
+        solicitud.setTipoDocumentoHijo((String) ComboBox_tipodocu2.getSelectedItem());
+        solicitud.setNumeroDocumentoHijo(tex_numdoc2.getText().trim());
+        solicitud.setPais(texpais.getText().trim());
+        solicitud.setDepartamento(tex_depa.getText().trim());
+        solicitud.setDistrito(tex_distr.getText().trim());
+        solicitud.setDireccion(tex_direc.getText().trim());
+        solicitud.setTipoProceso(getSelectedButtonText(buttonGroup1));
+        solicitud.setMotivoBaja(getSelectedButtonText(buttonGroup2));
+        solicitud.setFechaFinVinculo(tex_fecha.getText().trim());
+    repositorio.guardarSolicitud(solicitud);
+    }
+     
+     private String getSelectedButtonText(javax.swing.ButtonGroup buttonGroup) {
+        return buttonGroup.getSelection().getActionCommand();
+    }
+     
+    
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
+       
 
     java.awt.EventQueue.invokeLater(() -> new jframe_solicitudSeguro2().setVisible(true));
     }
@@ -400,14 +488,14 @@ public class jframe_solicitudSeguro2 extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
 
-        /* Create and display the form */
+       
        
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> ComboBox_tipodocu2;
     private javax.swing.JLabel apellidocony;
-    private javax.swing.JButton botonEnviar;
+    private javax.swing.JButton botonFinalizar;
     private javax.swing.JRadioButton boton_baja;
     private javax.swing.JRadioButton boton_divorcio;
     private javax.swing.JRadioButton boton_fallecimiento;
@@ -454,4 +542,4 @@ public class jframe_solicitudSeguro2 extends javax.swing.JFrame {
     private javax.swing.JLabel vinculofamiliar;
     // End of variables declaration//GEN-END:variables
 
-    
+}
