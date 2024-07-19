@@ -1,5 +1,7 @@
 package GUI;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.FileWriter;
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,108 +17,133 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import plazavea.empleados.Empleado;
 
+
 public class JFrame_Empleados extends javax.swing.JFrame{
-    
-   private final ArrayList<Empleado> listaEmpleados;
+
+    private final ArrayList<Empleado> listaEmpleados;
     private final DefaultTableModel modeloTabla;
     private int selectedRow = -1;
-      
-
+    
 public JFrame_Empleados() {
    initComponents();
+        
         listaEmpleados = new ArrayList<>();
         modeloTabla = new DefaultTableModel(
-            new Object[]{"Nombre", "Apellido Paterno", "Apellido Materno", "Edad", "Género", "DNI", "Teléfono", "Puesto", "Tipo de Seguro", "Correo", "Estado Civil", "Fecha de Nacimiento", "Nacionalidad"},
+            new Object[]{"Nombre", "Apellido Paterno", "Apellido Materno", "Edad", "Genero","Dni" ,"telefono", "Puesto", "Tipo de Seguro", "Correo", "Estado Civil","Fecha De Nacimiento", "Nacionalidad"},
             0
         );
         tbempleados.setModel(modeloTabla);
+        
+        botonGuardarEmpleado.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                guardarEmpleado();
+            }
+        });
+
+        botonmodificar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cargarEmpleadoParaModificar();
+            }
+        });
+
+        botoneliminar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                eliminarEmpleado();
+            }
+        });
+            
     }
 
-    private void guardarEmpleado() {
-        String dni = txtDni.getText();
-        String nombre = txtNombre.getText();
-        String apellidoPaterno = txtApellidoPaterno.getText();
-        String apellidoMaterno = txtApellidoMaterno.getText();
-        String edadStr = txtEdad.getText();
-        String genero = comboGenero.getSelectedItem().toString();
-        String telefono = txtTelefono.getText();
-        String puesto = txtPuesto.getText();
-        String tipoSeguro = txtTipoSeguro.getText();
-        String fechaNStr = dateFechaNacimiento.getText();
-        String gmail = txtGmail.getText();
-        String estadoCivil = comboEstadoCivil.getSelectedItem().toString();
-        String nacionalidad = txtNacionalidad.getText();
 
-        // Validación de campos obligatorios
-        if (nombre.isEmpty() || apellidoPaterno.isEmpty() || apellidoMaterno.isEmpty() || 
-            edadStr.isEmpty() || dni.isEmpty() || telefono.isEmpty() || puesto.isEmpty() ||
-            gmail.isEmpty() || fechaNStr.isEmpty() || nacionalidad.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        private void guardarEmpleado() {
+    String dni = txtDni.getText();
+    String nombre = txtNombre.getText();
+    String apellido_Paterno = txtApellidoPaterno.getText();
+    String apellido_Materno = txtApellidoMaterno.getText();
+    String edadStr = txtEdad.getText(); 
+    String genero = comboGenero.getSelectedItem().toString();
+    String telefono = txtTelefono.getText();
+    String puesto = txtPuesto.getText();
+    String tipoSeguro = txtTipoSeguro.getText();
+    String fechaNStr = dateFechaNacimiento.getText();
+    String gmail = txtGmail.getText();
+    String Ecivil = comboEstadoCivil.getSelectedItem().toString(); 
+    String nacionalidad = txtNacionalidad.getText();
 
-        int edad;
-        Date fechaN;
-        try {
-            edad = Integer.parseInt(edadStr);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "La edad debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+    // Validación de campos obligatorios
+    if (nombre.isEmpty() || apellido_Paterno.isEmpty() || apellido_Materno.isEmpty() || 
+        edadStr.isEmpty() || dni.isEmpty() || telefono.isEmpty() || puesto.isEmpty() ||
+        gmail.isEmpty() || fechaNStr.isEmpty() || nacionalidad.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
 
-        try {
-            fechaN = new SimpleDateFormat("dd/MM/yyyy").parse(fechaNStr);
-        } catch (ParseException e) {
-            JOptionPane.showMessageDialog(this, "La fecha de nacimiento debe tener el formato dd/MM/yyyy.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+    int edad;
+    Date fechaN;
+    
+    try {
+        edad = Integer.parseInt(edadStr); 
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "La edad debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
 
-        // Creación del objeto Empleado
-        Empleado empleado = new Empleado(nombre, apellidoPaterno, apellidoMaterno, edad, genero, dni, telefono, puesto, tipoSeguro, gmail, estadoCivil, fechaN, nacionalidad);
+    try {
+        fechaN = new SimpleDateFormat("dd/MM/yyyy").parse(fechaNStr); 
+    } catch (ParseException e) {
+        JOptionPane.showMessageDialog(this, "La fecha de nacimiento debe tener el formato dd/MM/yyyy.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
 
-        if (selectedRow == -1) {
-            listaEmpleados.add(empleado);
-            modeloTabla.addRow(new Object[]{nombre, apellidoPaterno, apellidoMaterno, edad, genero, dni, telefono, puesto, tipoSeguro, gmail, estadoCivil, fechaN, nacionalidad});
-        } else {
-            listaEmpleados.set(selectedRow, empleado);
-            modeloTabla.setValueAt(nombre, selectedRow, 0);
-            modeloTabla.setValueAt(apellidoPaterno, selectedRow, 1);
-            modeloTabla.setValueAt(apellidoMaterno, selectedRow, 2);
-            modeloTabla.setValueAt(edad, selectedRow, 3);
-            modeloTabla.setValueAt(genero, selectedRow, 4);
-            modeloTabla.setValueAt(dni, selectedRow, 5);
-            modeloTabla.setValueAt(telefono, selectedRow, 6);
-            modeloTabla.setValueAt(puesto, selectedRow, 7);
-            modeloTabla.setValueAt(tipoSeguro, selectedRow, 8);
-            modeloTabla.setValueAt(gmail, selectedRow, 9);
-            modeloTabla.setValueAt(estadoCivil, selectedRow, 10);
-            modeloTabla.setValueAt(fechaN, selectedRow, 11);
-            modeloTabla.setValueAt(nacionalidad, selectedRow, 12);
-            selectedRow = -1;
+    // Creación del objeto Empleado
+    Empleado empleado = new Empleado(nombre, apellido_Paterno, apellido_Materno, edad, genero, dni, telefono, puesto, tipoSeguro, gmail, Ecivil, fechaN, nacionalidad);
+
+    if (selectedRow == -1) {
+        listaEmpleados.add(empleado);
+        modeloTabla.addRow(new Object[]{nombre, apellido_Paterno, apellido_Materno, edad, genero, dni, telefono, puesto, tipoSeguro, gmail, Ecivil, fechaN, nacionalidad});
+    } else {
+        listaEmpleados.set(selectedRow, empleado);
+        modeloTabla.setValueAt(nombre, selectedRow, 0);
+        modeloTabla.setValueAt(apellido_Paterno, selectedRow, 1);
+        modeloTabla.setValueAt(apellido_Materno, selectedRow, 2);
+        modeloTabla.setValueAt(edad, selectedRow, 3);
+        modeloTabla.setValueAt(genero, selectedRow, 4);
+        modeloTabla.setValueAt(dni, selectedRow, 5);
+        modeloTabla.setValueAt(telefono, selectedRow, 6);
+        modeloTabla.setValueAt(puesto, selectedRow, 7);
+        modeloTabla.setValueAt(tipoSeguro, selectedRow, 8);
+        modeloTabla.setValueAt(gmail, selectedRow, 9);
+        modeloTabla.setValueAt(Ecivil, selectedRow, 10);
+        modeloTabla.setValueAt(fechaN, selectedRow, 11);
+        modeloTabla.setValueAt(nacionalidad, selectedRow, 12);
+        selectedRow = -1;
         }
         limpiarCampos();
     }
 
     private void cargarEmpleadoParaModificar() {
-        selectedRow = tbempleados.getSelectedRow();
-        if (selectedRow != -1) {
-            txtNombre.setText(modeloTabla.getValueAt(selectedRow, 0).toString());
-            txtApellidoPaterno.setText(modeloTabla.getValueAt(selectedRow, 1).toString());
-            txtApellidoMaterno.setText(modeloTabla.getValueAt(selectedRow, 2).toString());
-            txtEdad.setText(modeloTabla.getValueAt(selectedRow, 3).toString());
-            comboGenero.setSelectedItem(modeloTabla.getValueAt(selectedRow, 4).toString());
-            txtDni.setText(modeloTabla.getValueAt(selectedRow, 5).toString());
-            txtTelefono.setText(modeloTabla.getValueAt(selectedRow, 6).toString());
-            txtPuesto.setText(modeloTabla.getValueAt(selectedRow, 7).toString());
-            txtTipoSeguro.setText(modeloTabla.getValueAt(selectedRow, 8).toString());
-            txtGmail.setText(modeloTabla.getValueAt(selectedRow, 9).toString());
-            comboEstadoCivil.setSelectedItem(modeloTabla.getValueAt(selectedRow, 10).toString());
-            dateFechaNacimiento.setText(modeloTabla.getValueAt(selectedRow, 11).toString());
-            txtNacionalidad.setText(modeloTabla.getValueAt(selectedRow, 12).toString());
-        } else {
-            JOptionPane.showMessageDialog(this, "Seleccione una fila para modificar.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
+    selectedRow = tbempleados.getSelectedRow();
+    if (selectedRow != -1) {
+        txtDni.setText(modeloTabla.getValueAt(selectedRow, 0).toString());
+        txtNombre.setText(modeloTabla.getValueAt(selectedRow, 1).toString());
+        txtApellidoPaterno.setText(modeloTabla.getValueAt(selectedRow, 2).toString());
+        txtApellidoMaterno.setText(modeloTabla.getValueAt(selectedRow, 3).toString());
+        txtEdad.setText(modeloTabla.getValueAt(selectedRow, 4).toString());
+        comboGenero.setSelectedItem(modeloTabla.getValueAt(selectedRow, 5).toString());
+        txtTelefono.setText(modeloTabla.getValueAt(selectedRow, 6).toString());
+        txtPuesto.setText(modeloTabla.getValueAt(selectedRow, 7).toString());
+        txtTipoSeguro.setText(modeloTabla.getValueAt(selectedRow, 8).toString());
+        dateFechaNacimiento.setText(modeloTabla.getValueAt(selectedRow, 9).toString());
+        txtGmail.setText(modeloTabla.getValueAt(selectedRow, 10).toString());
+        comboEstadoCivil.setSelectedItem(modeloTabla.getValueAt(selectedRow, 11).toString());
+        txtNacionalidad.setText(modeloTabla.getValueAt(selectedRow, 12).toString());
+    } else {
+        JOptionPane.showMessageDialog(this, "Seleccione una fila para modificar.", "Error", JOptionPane.ERROR_MESSAGE);
     }
+}
 
     private void eliminarEmpleado() {
         int selectedRow = tbempleados.getSelectedRow();
@@ -134,16 +161,15 @@ public JFrame_Empleados() {
         txtApellidoPaterno.setText("");
         txtApellidoMaterno.setText("");
         txtEdad.setText("");
-        comboGenero.setSelectedIndex(0);
+        comboGenero.setSelectedIndex(0); // Or set to appropriate default
         txtTelefono.setText("");
         txtPuesto.setText("");
         txtTipoSeguro.setText("");
         dateFechaNacimiento.setText("");
         txtGmail.setText("");
-        comboEstadoCivil.setSelectedIndex(0);
+        comboEstadoCivil.setSelectedIndex(0); // Or set to appropriate default
         txtNacionalidad.setText("");
     }
-
 
 
     @SuppressWarnings("unchecked")
@@ -190,7 +216,6 @@ public JFrame_Empleados() {
         botonGuardarEmpleado = new javax.swing.JButton();
         botonmodificar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
-        botonGraficoGenero = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Lista de empleados");
@@ -293,7 +318,7 @@ public JFrame_Empleados() {
 
         jLabel5.setText("Apellido Materno:");
 
-        comboGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Masculino", "Femenino" }));
+        comboGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Masculino ", "Femenino" }));
 
         jLabel9.setText("Tipo de seguro:");
 
@@ -451,7 +476,7 @@ public JFrame_Empleados() {
                     .addComponent(jLabel8)
                     .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanelRegistrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanelRegistrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtPuesto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
@@ -491,14 +516,6 @@ public JFrame_Empleados() {
         });
         getContentPane().add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 10, -1, -1));
 
-        botonGraficoGenero.setText("Grafico");
-        botonGraficoGenero.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonGraficoGeneroActionPerformed(evt);
-            }
-        });
-        getContentPane().add(botonGraficoGenero, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 10, 80, -1));
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -509,15 +526,15 @@ public JFrame_Empleados() {
     }//GEN-LAST:event_atrasActionPerformed
 
     private void botonmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonmodificarActionPerformed
-        cargarEmpleadoParaModificar();
+        guardarEmpleado();
     }//GEN-LAST:event_botonmodificarActionPerformed
 
     private void botonGuardarEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonGuardarEmpleadoActionPerformed
-        guardarEmpleado();
+
     }//GEN-LAST:event_botonGuardarEmpleadoActionPerformed
 
     private void botoneliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoneliminarActionPerformed
-        eliminarEmpleado();
+
     }//GEN-LAST:event_botoneliminarActionPerformed
 
     private void botonExportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonExportarActionPerformed
@@ -525,7 +542,7 @@ public JFrame_Empleados() {
     }//GEN-LAST:event_botonExportarActionPerformed
 
     private void botonImportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonImportarActionPerformed
-       JFileChooser fileChooser = new JFileChooser();
+        JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Seleccionar archivo de empleados");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de texto", "txt");
         fileChooser.setFileFilter(filter);
@@ -543,14 +560,9 @@ public JFrame_Empleados() {
                 dispose();
     }//GEN-LAST:event_btnBuscarActionPerformed
 
-    private void botonGraficoGeneroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonGraficoGeneroActionPerformed
-    JFrame_GraficoGenero graficoGenero = new JFrame_GraficoGenero(listaEmpleados);
-    graficoGenero.setVisible(true);       
-    }//GEN-LAST:event_botonGraficoGeneroActionPerformed
-
      private void importarEmpleadosDesdeArchivo(File archivo) {
         BufferedReader br = null;
-        String line;
+        String line = "";
 
         try {
             br = new BufferedReader(new FileReader(archivo));
@@ -595,7 +607,7 @@ public JFrame_Empleados() {
     }
 
     private String[] cleanAndSplitLine(String line) {
-         // Eliminar etiquetas de campo y dividir por comas
+        // Eliminar etiquetas de campo y dividir por comas
         String[] parts = line.split(", ");
         String[] datos = new String[13];
 
@@ -611,7 +623,7 @@ public JFrame_Empleados() {
     }
 
     private Date parseFecha(String fecha) {
-     try {
+        try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             return dateFormat.parse(fecha);
         } catch (ParseException e) {
@@ -621,7 +633,7 @@ public JFrame_Empleados() {
     
     private void exportarDatos() {
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setSelectedFile(new File("empleados.txt"));
+        fileChooser.setSelectedFile(new java.io.File("empleado.txt"));
         int seleccion = fileChooser.showSaveDialog(this);
 
         if (seleccion == JFileChooser.APPROVE_OPTION) {
@@ -641,8 +653,8 @@ public JFrame_Empleados() {
                     writer.write("Estado Civil: " + emp.getEcivil() + ", ");
                     // Formatear la fecha de nacimiento
                 String fechaFormateada = emp.getFechaN() != null ? dateFormat.format(emp.getFechaN()) : "null";
-                writer.write("Fecha de Nacimiento: " + fechaFormateada + ", ");
-                writer.write("Nacionalidad: " + emp.getNacionalidad() + "\n");
+                    writer.write("Fecha de Nacimiento: " + fechaFormateada + ", ");
+                    writer.write("Nacionalidad: " + emp.getNacionalidad() + "\n");
                 }
                 JOptionPane.showMessageDialog(this, "Datos exportados correctamente.", "Exportar", JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException e) {
@@ -666,7 +678,6 @@ public JFrame_Empleados() {
     private javax.swing.JComboBox<String> Tipodocumento;
     private javax.swing.JButton atras;
     private javax.swing.JButton botonExportar;
-    private javax.swing.JButton botonGraficoGenero;
     private javax.swing.JButton botonGuardarEmpleado;
     private javax.swing.JButton botonImportar;
     private javax.swing.JButton botoneliminar;

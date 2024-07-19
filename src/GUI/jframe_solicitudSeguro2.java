@@ -418,7 +418,7 @@ public class jframe_solicitudSeguro2 extends javax.swing.JFrame {
             validarCamposConyugeHijo();
             guardarDatos();
             JOptionPane.showMessageDialog(this, "Formulario enviado correctamente.");
-            new JFrame_gestorsolicitud().setVisible(true);
+            new JFrame_gestorsolisitud().setVisible(true);
             this.dispose();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

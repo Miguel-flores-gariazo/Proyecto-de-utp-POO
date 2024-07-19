@@ -3,7 +3,7 @@ package GUI;
 import plazavea.solicitudseguro.SolicitudSeguroSalud;
 
 import javax.swing.JOptionPane;
-import javax.swing.ButtonGroup;
+
 
 public class JFrame_Solicitudaseguro01 extends javax.swing.JFrame {
     
