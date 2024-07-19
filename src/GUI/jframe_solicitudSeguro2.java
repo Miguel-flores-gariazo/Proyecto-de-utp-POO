@@ -6,24 +6,24 @@ import plazavea.solicitudseguro.SolicitudSeguroSalud2;
 
 public class jframe_solicitudSeguro2 extends javax.swing.JFrame {
 
-  private Repositorio repositorio;
+ private Repositorio repositorio;
 
     public jframe_solicitudSeguro2() {
         initComponents();
         
-         repositorio = new Repositorio();
+        // Usar el singleton para obtener la instancia del repositorio
+        repositorio = Repositorio.getInstance();
         
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
         
-       buttonGroup1.add(boton_incrip);
+        buttonGroup1.add(boton_incrip);
         buttonGroup1.add(boton_baja);
         buttonGroup1.add(boton_modificacion);
         
-        
         buttonGroup2.add(boton_divorcio);
         buttonGroup2.add(boton_fallecimiento);
-        buttonGroup2.add(boton_porotros);  
+        buttonGroup2.add(boton_porotros);   
         
     }
     
@@ -400,8 +400,7 @@ public class jframe_solicitudSeguro2 extends javax.swing.JFrame {
 
     
     private void botonsalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonsalirActionPerformed
-      
-         int respuesta = JOptionPane.showConfirmDialog(this, "¿Desea finalizar?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+      int respuesta = JOptionPane.showConfirmDialog(this, "¿Desea finalizar?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (respuesta == JOptionPane.YES_OPTION) {
             new JFrame_Menu().setVisible(true);
             this.dispose();
@@ -411,8 +410,7 @@ public class jframe_solicitudSeguro2 extends javax.swing.JFrame {
     
     
     private void botonFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonFinalizarActionPerformed
-        
-       try {
+        try {
             validarSeleccionUnica(buttonGroup1);
             validarSeleccionUnica(buttonGroup2);
             validarCamposConyugeHijo();
@@ -423,25 +421,24 @@ public class jframe_solicitudSeguro2 extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-        
     }//GEN-LAST:event_botonFinalizarActionPerformed
 
     private void botonatrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonatrasActionPerformed
-        
         int respuesta = JOptionPane.showConfirmDialog(this, "¿Seguro que quieres ir atrás?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (respuesta == JOptionPane.YES_OPTION) {
             new JFrame_Solicitudaseguro01().setVisible(true);
             this.dispose();
         } 
+
     }//GEN-LAST:event_botonatrasActionPerformed
     private void validarSeleccionUnica(javax.swing.ButtonGroup grupo) throws Exception {
-        if (grupo.getSelection() == null) {
+         if (grupo.getSelection() == null) {
             throw new Exception("Debe seleccionar una opción en cada grupo de botones.");
         }
     }
 
     private void validarCamposConyugeHijo() throws Exception {
-        String nombreConyuge = tex_nombreconyu.getText().trim();
+       String nombreConyuge = tex_nombreconyu.getText().trim();
         String apellidoConyuge = tex_apeconyu.getText().trim();
         String nombreHijo = tex_nomhijoma.getText().trim();
         if (nombreConyuge.isEmpty() || apellidoConyuge.isEmpty() || nombreHijo.isEmpty()) {
@@ -466,18 +463,21 @@ public class jframe_solicitudSeguro2 extends javax.swing.JFrame {
         solicitud.setTipoProceso(getSelectedButtonText(buttonGroup1));
         solicitud.setMotivoBaja(getSelectedButtonText(buttonGroup2));
         solicitud.setFechaFinVinculo(tex_fecha.getText().trim());
-    repositorio.guardarSolicitud(solicitud);
+        
+        // Agregar la solicitud al repositorio
+        repositorio.addSolicitudSalud2(solicitud);
     }
      
      private String getSelectedButtonText(javax.swing.ButtonGroup buttonGroup) {
-        return buttonGroup.getSelection().getActionCommand();
+       return buttonGroup.getSelection().getActionCommand();
     }
      
     
     public static void main(String args[]) {
        
 
-    java.awt.EventQueue.invokeLater(() -> new jframe_solicitudSeguro2().setVisible(true));
+     java.awt.EventQueue.invokeLater(() -> new jframe_solicitudSeguro2().setVisible(true));
+   
     }
 
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

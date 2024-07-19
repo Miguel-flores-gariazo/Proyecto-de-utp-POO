@@ -3,6 +3,7 @@ package GUI;
 import plazavea.solicitudseguro.SolicitudSeguroSalud;
 
 import javax.swing.JOptionPane;
+import plazavea.solicitudseguro.Repositorio;
 
 
 public class JFrame_Solicitudaseguro01 extends javax.swing.JFrame {
@@ -11,95 +12,82 @@ private SolicitudSeguroSalud solicitud;
 
     public JFrame_Solicitudaseguro01() {
         initComponents();
-        
-         buttonGroup1.add(boton_hombre);
+        buttonGroup1.add(boton_hombre);
         buttonGroup1.add(boton_nujer);
         buttonGroup2.add(boton_solter);
         buttonGroup2.add(boton_casad);
         buttonGroup2.add(boton_divorciad);
         buttonGroup2.add(boton_viudo);
-         
     }
- private boolean validarCampos() {
-        // Validar campo de razon social (empresa)
+
+    private boolean validarCampos() {
         String razonSocial = tex_razonsocial.getText().trim();
         if (razonSocial.isEmpty()) {
             mostrarError("Debe ingresar la razón social (nombre de la empresa).");
             return false;
         }
-    
-     // Validar campo de número de RUC
         String ruc = tex_numeroruc.getText().trim();
         if (ruc.isEmpty()) {
             mostrarError("Debe ingresar el número de RUC.");
             return false;
         }
-    
-    String apellidoPaterno = tex_apellidoP.getText().trim();
+        String apellidoPaterno = tex_apellidoP.getText().trim();
         if (apellidoPaterno.isEmpty()) {
             mostrarError("Debe ingresar el apellido paterno del afiliado titular.");
             return false;
         }
-    
-    String apellidoMaterno = tex_apellidoM.getText().trim();
+        String apellidoMaterno = tex_apellidoM.getText().trim();
         if (apellidoMaterno.isEmpty()) {
             mostrarError("Debe ingresar el apellido materno del afiliado titular.");
             return false;
         }
-    String nombres = tex_nombres.getText().trim();
+        String nombres = tex_nombres.getText().trim();
         if (nombres.isEmpty()) {
             mostrarError("Debe ingresar los nombres del afiliado titular.");
             return false;
         }
-    String tipoDocumento = combox_tipodocu.getSelectedItem().toString();
-      
-     String numeroDocumento = tex_numero.getText().trim();
+        String tipoDocumento = combox_tipodocu.getSelectedItem().toString();
+        String numeroDocumento = tex_numero.getText().trim();
         if (numeroDocumento.isEmpty()) {
             mostrarError("Debe ingresar el número de documento del afiliado titular.");
             return false;
-        } 
-     String fechaNacimiento = tex_fecha.getText().trim();
+        }
+        String fechaNacimiento = tex_fecha.getText().trim();
         if (fechaNacimiento.isEmpty()) {
             mostrarError("Debe ingresar la fecha de nacimiento del afiliado titular.");
             return false;
         }
-      if (!boton_hombre.isSelected() && !boton_nujer.isSelected()) {
+        if (!boton_hombre.isSelected() && !boton_nujer.isSelected()) {
             mostrarError("Debe seleccionar el sexo del afiliado titular.");
             return false;
         }
-      
-    if (!boton_solter.isSelected() && !boton_casad.isSelected() && !boton_divorciad.isSelected() && !boton_viudo.isSelected()) {
+        if (!boton_solter.isSelected() && !boton_casad.isSelected() && !boton_divorciad.isSelected() && !boton_viudo.isSelected()) {
             mostrarError("Debe seleccionar el estado civil del afiliado titular.");
             return false;
         }
-  
-    String numeroTelefono = tex_numertelefono.getText().trim();    
-        
-     if (numeroTelefono.isEmpty() || numeroTelefono.length() != 9) {
+        String numeroTelefono = tex_numertelefono.getText().trim();
+        if (numeroTelefono.isEmpty() || numeroTelefono.length() != 9) {
             mostrarError("Debe ingresar un número de teléfono válido (9 dígitos).");
             return false;
         }
-     String email = tex_gmail.getText().trim();
-        // Validación básica del formato de correo electrónico
+        String email = tex_gmail.getText().trim();
         if (email.isEmpty() || !email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
             mostrarError("Debe ingresar un correo electrónico válido.");
             return false;
         }
-      // Validar campo de dirección
-     String direccion = tex_direccion.getText().trim();
+        String direccion = tex_direccion.getText().trim();
         if (direccion.isEmpty()) {
             mostrarError("Debe ingresar la dirección del afiliado titular.");
             return false;
-        }   
-       return true;
-    }   
-        
-     private void mostrarError(String mensaje) {
+        }
+        return true;
+    }
+
+    private void mostrarError(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
-    } 
-     
-     private void guardarDatos() {
-        // Assuming SolicitudSeguroSalud has a suitable constructor or setters for all fields
+    }
+
+    private void guardarDatos() {
         solicitud = new SolicitudSeguroSalud(
                 tex_razonsocial.getText().trim(),
                 tex_numeroruc.getText().trim(),
@@ -115,7 +103,7 @@ private SolicitudSeguroSalud solicitud;
                 tex_gmail.getText().trim(),
                 tex_direccion.getText().trim()
         );
-     }
+    }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -440,20 +428,28 @@ private SolicitudSeguroSalud solicitud;
     }// </editor-fold>//GEN-END:initComponents
 
     private void boton_volverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_volverActionPerformed
-      int confirmacion = JOptionPane.showConfirmDialog(this, "¿Está seguro de que desea volver al menú? Se perderán todos los datos no guardados.", "Confirmación", JOptionPane.YES_NO_OPTION);
-    if (confirmacion == JOptionPane.YES_OPTION) {
-        // Crear instancia del JFrame_menu
-        JFrame_Menu menu = new JFrame_Menu();
-        // Hacer visible el JFrame_menu
-        menu.setVisible(true);
-        // Cerrar el JFrame actual
-        this.dispose();
-    } 
+ int confirmacion = JOptionPane.showConfirmDialog(this, "¿Está seguro de que desea volver al menú? Se perderán todos los datos no guardados.", "Confirmación", JOptionPane.YES_NO_OPTION);
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            JFrame_Menu menu = new JFrame_Menu();
+            menu.setVisible(true);
+            this.dispose();
+        }
     }//GEN-LAST:event_boton_volverActionPerformed
 
     private void boton_siguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_siguienteActionPerformed
-     if (validarCampos()) {
-      guardarDatos();
+     
+        if (validarCampos()) {
+            guardarDatos();
+            
+            // Obtener el repositorio global y agregar la solicitud
+            Repositorio repositorio = Repositorio.getInstance();
+            repositorio.addSolicitudSalud(solicitud);
+
+            JOptionPane.showMessageDialog(this, "Datos guardados correctamente.", "Información", JOptionPane.INFORMATION_MESSAGE);
+        
+        if (validarCampos()) {
+        guardarDatos();
+
             JOptionPane.showMessageDialog(this, "Datos guardados correctamente.", "Información", JOptionPane.INFORMATION_MESSAGE);
     
             // Si los campos están validados correctamente, procedemos a guardar los datos en la instancia de SolicitudSeguroSalud
@@ -479,11 +475,11 @@ private SolicitudSeguroSalud solicitud;
             // Mostrar los datos en consola para verificar
             System.out.println(solicitud);
 
+              // Abrir la siguiente ventana
         jframe_solicitudSeguro2 siguienteVentana = new jframe_solicitudSeguro2();
-        // Hacer visible el JFrame_Solicitudaseguro2
         siguienteVentana.setVisible(true);
-        // Cerrar el JFrame actual
         this.dispose();
+    }
     }
     }//GEN-LAST:event_boton_siguienteActionPerformed
 
@@ -491,12 +487,7 @@ private SolicitudSeguroSalud solicitud;
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-       java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new JFrame_Solicitudaseguro01().setVisible(true);
-            }
-        });
+       java.awt.EventQueue.invokeLater(() -> new JFrame_Solicitudaseguro01().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

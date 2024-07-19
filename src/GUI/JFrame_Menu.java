@@ -1,14 +1,8 @@
 package GUI;
 
 import RAHashMap.Jframe_registroAccidente;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import plazavea.empleados.Empleado;
+
+import plazavea.fallecimientos.JFrame_Fallecimiento;
 
 
 public class JFrame_Menu extends javax.swing.JFrame {
@@ -35,13 +29,12 @@ public class JFrame_Menu extends javax.swing.JFrame {
         jButtonListadeEmpleados = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        botonCapacitacion = new javax.swing.JButton();
+        botonAccidentes = new javax.swing.JButton();
+        botonSolicitud = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        jButtonImportar = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
+        botonfallecido = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -64,29 +57,27 @@ public class JFrame_Menu extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         jLabel3.setText("SEGURIDAD Y SALUD ");
 
-        jButton4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton4.setText("CAPACITACION");
-
-        jButton3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton3.setText("SEGUROS MEDICOS");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        botonCapacitacion.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        botonCapacitacion.setText("CAPACITACION");
+        botonCapacitacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                botonCapacitacionActionPerformed(evt);
             }
         });
 
-        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton1.setText("Registro de accidente ");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        botonAccidentes.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        botonAccidentes.setText("Registro de accidente ");
+        botonAccidentes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                botonAccidentesActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Solicitud Seguro");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        botonSolicitud.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        botonSolicitud.setText("Solicitud Seguro");
+        botonSolicitud.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                botonSolicitudActionPerformed(evt);
             }
         });
 
@@ -101,45 +92,34 @@ public class JFrame_Menu extends javax.swing.JFrame {
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(52, 52, 52))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(118, 118, 118))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton4)
-                        .addGap(159, 159, 159))))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(140, 140, 140)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(173, 173, 173)
-                        .addComponent(jButton2)))
-                .addGap(0, 0, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(botonSolicitud, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(botonAccidentes, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
+                            .addComponent(botonCapacitacion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(118, 118, 118))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(40, 40, 40)
                 .addComponent(jLabel3)
-                .addGap(54, 54, 54)
-                .addComponent(jButton3)
-                .addGap(30, 30, 30)
-                .addComponent(jButton2)
+                .addGap(102, 102, 102)
+                .addComponent(botonSolicitud, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addGap(36, 36, 36)
-                .addComponent(jButton4)
-                .addContainerGap(146, Short.MAX_VALUE))
+                .addComponent(botonAccidentes)
+                .addGap(18, 18, 18)
+                .addComponent(botonCapacitacion)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jButtonImportar.setText("Importar Lista de trabajadores");
-        jButtonImportar.addActionListener(new java.awt.event.ActionListener() {
+        jLabel4.setText("V:002.2");
+
+        botonfallecido.setText("Fallecidos");
+        botonfallecido.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonImportarActionPerformed(evt);
+                botonfallecidoActionPerformed(evt);
             }
         });
-
-        jLabel4.setText("V:002");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -151,16 +131,16 @@ public class JFrame_Menu extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(62, 62, 62)
-                        .addComponent(jButtonImportar, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(64, Short.MAX_VALUE))
+                        .addGap(83, 83, 83)
+                        .addComponent(botonfallecido)))
+                .addContainerGap(150, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(38, 38, 38)
-                .addComponent(jButtonImportar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(77, 77, 77)
+                .addComponent(botonfallecido)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 102, Short.MAX_VALUE)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -182,7 +162,7 @@ public class JFrame_Menu extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButtonListadeEmpleados)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
@@ -202,17 +182,11 @@ public class JFrame_Menu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void botonAccidentesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAccidentesActionPerformed
       Jframe_registroAccidente accidente=new Jframe_registroAccidente();
              accidente.setVisible(true);
              dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-                  JFrame_Menu Inicio=new JFrame_Menu();
-             Inicio.setVisible(true);
-             dispose();
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_botonAccidentesActionPerformed
 
     private void jButtonListadeEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonListadeEmpleadosActionPerformed
                  JFrame_Empleados empleados=new JFrame_Empleados();
@@ -220,15 +194,23 @@ public class JFrame_Menu extends javax.swing.JFrame {
              dispose();
     }//GEN-LAST:event_jButtonListadeEmpleadosActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        JFrame_Solicitudaseguro01 empleados=new JFrame_Solicitudaseguro01();
-             empleados.setVisible(true);
+    private void botonSolicitudActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonSolicitudActionPerformed
+        JFrame_Solicitudaseguro01 soli=new JFrame_Solicitudaseguro01();
+             soli.setVisible(true);
              dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_botonSolicitudActionPerformed
 
-    private void jButtonImportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonImportarActionPerformed
-                                          
-    }//GEN-LAST:event_jButtonImportarActionPerformed
+    private void botonCapacitacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCapacitacionActionPerformed
+        jframe_tablacapacitacion capa=new jframe_tablacapacitacion();
+             capa.setVisible(true);
+             dispose();
+    }//GEN-LAST:event_botonCapacitacionActionPerformed
+
+    private void botonfallecidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonfallecidoActionPerformed
+        JFrame_Fallecimiento falle=new JFrame_Fallecimiento();
+             falle.setVisible(true);
+             dispose();
+    }//GEN-LAST:event_botonfallecidoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -267,11 +249,10 @@ public class JFrame_Menu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButtonImportar;
+    private javax.swing.JButton botonAccidentes;
+    private javax.swing.JButton botonCapacitacion;
+    private javax.swing.JButton botonSolicitud;
+    private javax.swing.JButton botonfallecido;
     private javax.swing.JButton jButtonListadeEmpleados;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
