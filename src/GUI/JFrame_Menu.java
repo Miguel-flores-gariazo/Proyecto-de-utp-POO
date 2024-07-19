@@ -2,7 +2,6 @@ package GUI;
 
 import RAHashMap.Jframe_registroAccidente;
 
-import plazavea.fallecimientos.JFrame_Fallecimiento;
 
 
 public class JFrame_Menu extends javax.swing.JFrame {
@@ -29,12 +28,10 @@ public class JFrame_Menu extends javax.swing.JFrame {
         jButtonListadeEmpleados = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        botonCapacitacion = new javax.swing.JButton();
         botonAccidentes = new javax.swing.JButton();
         botonSolicitud = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        botonfallecido = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -57,14 +54,6 @@ public class JFrame_Menu extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         jLabel3.setText("SEGURIDAD Y SALUD ");
 
-        botonCapacitacion.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        botonCapacitacion.setText("CAPACITACION");
-        botonCapacitacion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonCapacitacionActionPerformed(evt);
-            }
-        });
-
         botonAccidentes.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         botonAccidentes.setText("Registro de accidente ");
         botonAccidentes.addActionListener(new java.awt.event.ActionListener() {
@@ -73,7 +62,6 @@ public class JFrame_Menu extends javax.swing.JFrame {
             }
         });
 
-        botonSolicitud.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         botonSolicitud.setText("Solicitud Seguro");
         botonSolicitud.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -92,55 +80,40 @@ public class JFrame_Menu extends javax.swing.JFrame {
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(52, 52, 52))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(botonSolicitud, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(botonAccidentes, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
-                            .addComponent(botonCapacitacion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(botonAccidentes, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(118, 118, 118))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(173, 173, 173)
+                .addComponent(botonSolicitud)
+                .addGap(0, 183, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(40, 40, 40)
                 .addComponent(jLabel3)
-                .addGap(102, 102, 102)
-                .addComponent(botonSolicitud, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(112, 112, 112)
+                .addComponent(botonSolicitud)
                 .addGap(18, 18, 18)
                 .addComponent(botonAccidentes)
-                .addGap(18, 18, 18)
-                .addComponent(botonCapacitacion)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jLabel4.setText("V:002.2");
-
-        botonfallecido.setText("Fallecidos");
-        botonfallecido.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonfallecidoActionPerformed(evt);
-            }
-        });
+        jLabel4.setText("V:002");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(83, 83, 83)
-                        .addComponent(botonfallecido)))
-                .addContainerGap(150, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(235, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(77, 77, 77)
-                .addComponent(botonfallecido)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 102, Short.MAX_VALUE)
+                .addContainerGap(205, Short.MAX_VALUE)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -162,7 +135,7 @@ public class JFrame_Menu extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButtonListadeEmpleados)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
@@ -201,15 +174,11 @@ public class JFrame_Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_botonSolicitudActionPerformed
 
     private void botonCapacitacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCapacitacionActionPerformed
-        jframe_tablacapacitacion capa=new jframe_tablacapacitacion();
-             capa.setVisible(true);
-             dispose();
+      
     }//GEN-LAST:event_botonCapacitacionActionPerformed
 
     private void botonfallecidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonfallecidoActionPerformed
-        JFrame_Fallecimiento falle=new JFrame_Fallecimiento();
-             falle.setVisible(true);
-             dispose();
+       
     }//GEN-LAST:event_botonfallecidoActionPerformed
 
     /**
@@ -250,9 +219,7 @@ public class JFrame_Menu extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonAccidentes;
-    private javax.swing.JButton botonCapacitacion;
     private javax.swing.JButton botonSolicitud;
-    private javax.swing.JButton botonfallecido;
     private javax.swing.JButton jButtonListadeEmpleados;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
