@@ -5,9 +5,6 @@ import java.util.Date;
 
 public class Empleado{
 
-    public static void setVisible(boolean b) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
     private String nombre;
     private String apellido_Paterno;
     private String apellido_Materno;
@@ -22,7 +19,8 @@ public class Empleado{
     private Date fechaN;
     private String nacionalidad;
 
-    public Empleado( String nombre, String apellido_Paterno, String apellido_Materno, int edad, String genero, String dni, String telefono, String puesto, String tipoSeguro, String gmail, String Ecivil, Date fechaN, String nacionalidad) {
+    // Constructor
+    public Empleado(String nombre, String apellido_Paterno, String apellido_Materno, int edad, String genero, String dni, String telefono, String puesto, String tipoSeguro, String gmail, String Ecivil, Date fechaN, String nacionalidad){      
         this.nombre = nombre;
         this.apellido_Paterno = apellido_Paterno;
         this.apellido_Materno = apellido_Materno;
@@ -142,24 +140,5 @@ public class Empleado{
 
     public void setNacionalidad(String nacionalidad) {
         this.nacionalidad = nacionalidad;
-    }
-
-    @Override
-    public String toString() {
-        return "Empleado{" +
-                "nombre='" + nombre + '\'' +
-                ", apellido_Paterno='" + apellido_Paterno + '\'' +
-                ", apellido_Materno='" + apellido_Materno + '\'' +
-                ", edad=" + edad +
-                ", genero='" + genero + '\'' +
-                ", dni='" + dni + '\'' +
-                ", telefono='" + telefono + '\'' +
-                ", puesto='" + puesto + '\'' +
-                ", tipoSeguro='" + tipoSeguro + '\'' +
-                ", fecha de nacimiento =" + fechaN +
-                ", correo electronico=" + gmail +
-                ", estado civil =" + Ecivil +
-                ", nacionalidad=" + nacionalidad +
-                '}';
     }
 }
