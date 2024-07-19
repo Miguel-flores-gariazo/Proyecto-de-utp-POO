@@ -4,25 +4,34 @@ package plazavea.solicitudseguro;
 import java.util.ArrayList;
 import java.util.List;
 
+
+// Se asume que SolicitudSeguroSalud y SolicitudSeguroSalud2 son clases de solicitud.
 public class Repositorio {
-    private List<SolicitudSeguro2> solicitudes;
+    private List<SolicitudSeguroSalud> solicitudesSalud;
+    private List<SolicitudSeguroSalud2> solicitudesSalud2;
+
 
     public Repositorio() {
-        solicitudes = new ArrayList<>();
+        solicitudesSalud = new ArrayList<>();
+        solicitudesSalud2 = new ArrayList<>();
     }
 
-    public void guardarSolicitud(SolicitudSeguro2 solicitud) {
-        solicitudes.add(solicitud);
-        System.out.println("Solicitud guardada: " + solicitud);
+// Método para guardar solicitudes de tipo SolicitudSeguroSalud
+    public void guardarSolicitud(SolicitudSeguroSalud solicitud) {
+        solicitudesSalud.add(solicitud);
+        System.out.println("Solicitud de Salud guardada: " + solicitud);
     }
-
+     // Método para guardar solicitudes de tipo SolicitudSeguroSalud2
     public void guardarSolicitud(SolicitudSeguroSalud2 solicitud) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        solicitudesSalud2.add(solicitud);
+        System.out.println("Solicitud de Salud2 guardada: " + solicitud);
     }
 
-    private static class SolicitudSeguro2 {
-
-        public SolicitudSeguro2() {
-        }
+// Métodos adicionales para obtener las solicitudes si es necesario
+    public List<SolicitudSeguroSalud> getSolicitudesSalud() {
+        return solicitudesSalud;
+    }
+   public List<SolicitudSeguroSalud2> getSolicitudesSalud2() {
+        return solicitudesSalud2;
     }
 }
