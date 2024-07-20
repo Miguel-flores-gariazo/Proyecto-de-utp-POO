@@ -10,28 +10,41 @@ public class Repositorio {
     private List<SolicitudSeguroSalud> solicitudesSalud;
     private List<SolicitudSeguroSalud2> solicitudesSalud2;
 
-
     public Repositorio() {
         solicitudesSalud = new ArrayList<>();
         solicitudesSalud2 = new ArrayList<>();
     }
 
-// Método para guardar solicitudes de tipo SolicitudSeguroSalud
-    public void guardarSolicitud(SolicitudSeguroSalud solicitud) {
+    public void addSolicitudSalud(SolicitudSeguroSalud solicitud) {
         solicitudesSalud.add(solicitud);
-        System.out.println("Solicitud de Salud guardada: " + solicitud);
-    }
-     // Método para guardar solicitudes de tipo SolicitudSeguroSalud2
-    public void guardarSolicitud(SolicitudSeguroSalud2 solicitud) {
-        solicitudesSalud2.add(solicitud);
-        System.out.println("Solicitud de Salud2 guardada: " + solicitud);
     }
 
-// Métodos adicionales para obtener las solicitudes si es necesario
+    public void addSolicitudSalud2(SolicitudSeguroSalud2 solicitud) {
+        solicitudesSalud2.add(solicitud);
+    }
+
     public List<SolicitudSeguroSalud> getSolicitudesSalud() {
         return solicitudesSalud;
     }
-   public List<SolicitudSeguroSalud2> getSolicitudesSalud2() {
+
+    public List<SolicitudSeguroSalud2> getSolicitudesSalud2() {
         return solicitudesSalud2;
+    }
+
+    public void removeSolicitudSalud(String numeroDocumento) {
+        solicitudesSalud.removeIf(s -> s.getNumeroDocumento().equals(numeroDocumento));
+    }
+
+    public void removeSolicitudSalud2(String numeroDocumentoConyuge) {
+        solicitudesSalud2.removeIf(s -> s.getNumeroDocumentoConyuge().equals(numeroDocumentoConyuge));
+    }
+
+    // Singleton pattern for global instance
+    private static class RepositorioSingletonHolder {
+        private static final Repositorio INSTANCE = new Repositorio();
+    }
+
+    public static Repositorio getInstance() {
+        return RepositorioSingletonHolder.INSTANCE;
     }
 }
