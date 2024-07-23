@@ -216,6 +216,7 @@ public JFrame_Empleados() {
         botonGuardarEmpleado = new javax.swing.JButton();
         botonmodificar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
+        botonGrafico = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Lista de empleados");
@@ -516,6 +517,14 @@ public JFrame_Empleados() {
         });
         getContentPane().add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 10, -1, -1));
 
+        botonGrafico.setText("Grafico");
+        botonGrafico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonGraficoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(botonGrafico, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 10, -1, -1));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -559,6 +568,12 @@ public JFrame_Empleados() {
             buscarFrame.setVisible(true);
                 dispose();
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void botonGraficoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonGraficoActionPerformed
+        JFrame_GraficoGenero grafi = new JFrame_GraficoGenero(listaEmpleados);
+            grafi.setVisible(true);
+                dispose();
+    }//GEN-LAST:event_botonGraficoActionPerformed
 
      private void importarEmpleadosDesdeArchivo(File archivo) {
         BufferedReader br = null;
@@ -678,6 +693,7 @@ public JFrame_Empleados() {
     private javax.swing.JComboBox<String> Tipodocumento;
     private javax.swing.JButton atras;
     private javax.swing.JButton botonExportar;
+    private javax.swing.JButton botonGrafico;
     private javax.swing.JButton botonGuardarEmpleado;
     private javax.swing.JButton botonImportar;
     private javax.swing.JButton botoneliminar;
