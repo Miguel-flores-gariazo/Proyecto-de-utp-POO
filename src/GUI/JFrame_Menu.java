@@ -1,5 +1,6 @@
 package GUI;
 
+import plazavea.capacitacion.jframe_tablacapacitacion;
 import RAArray.registroAccidente;
 
 
