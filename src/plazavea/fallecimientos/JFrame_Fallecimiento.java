@@ -1,5 +1,6 @@
 package plazavea.fallecimientos;
 
+import GUI.JFrame_Menu;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -47,6 +48,9 @@ private HashMap<Integer, fallecimiento> fallecimientos;
 
         JButton addButton = new JButton("Agregar");
         formPanel.add(addButton);
+        
+        JButton SalirButton = new JButton("Salir");
+        formPanel.add(SalirButton);
 
         add(formPanel, BorderLayout.SOUTH);
 
@@ -71,6 +75,16 @@ private HashMap<Integer, fallecimiento> fallecimientos;
                 } else {
                     JOptionPane.showMessageDialog(JFrame_Fallecimiento.this, "Por favor complete todos los campos.");
                 }
+            }
+        });
+        
+        // Acción del botón para salir
+        SalirButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame_Menu menu = new JFrame_Menu(); // Crear instancia de JFrame_Menu
+                menu.setVisible(true); // Hacer visible el nuevo JFrame
+                JFrame_Fallecimiento.this.dispose(); // Cerrar el JFrame_Fallecimiento
             }
         });
     }
