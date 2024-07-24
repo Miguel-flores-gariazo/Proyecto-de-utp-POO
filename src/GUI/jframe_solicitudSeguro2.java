@@ -411,8 +411,6 @@ public class jframe_solicitudSeguro2 extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_botonsalirActionPerformed
     
-    
-    
     private void botonFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonFinalizarActionPerformed
         try {
             validarSeleccionUnica(buttonGroup1);
@@ -435,112 +433,119 @@ public class jframe_solicitudSeguro2 extends javax.swing.JFrame {
         } 
 
     }//GEN-LAST:event_botonatrasActionPerformed
-   private void validarSeleccionUnica(ButtonGroup grupo) throws Exception {
-        if (grupo.getSelection() == null) {
-            throw new Exception("Debe seleccionar una opción en cada grupo de botones.");
-        }
-    }
-
-    private void validarCamposConyugeHijo() throws Exception {
-        String nombreConyuge = tex_nombreconyu.getText().trim();
-        String apellidoConyuge = tex_apeconyu.getText().trim();
-        String nombreHijo = tex_nomhijoma.getText().trim();
-        String apellidoHijo = tex_apellidomayo.getText().trim();
-        String numeroDocumentoConyuge = tex_numdoc2.getText().trim();
-        String numeroDocumentoHijo = tex_numdoc2.getText().trim();
-
-        if (nombreConyuge.isEmpty() || apellidoConyuge.isEmpty() || nombreHijo.isEmpty() || apellidoHijo.isEmpty()) {
-            throw new Exception("Los campos de cónyuge e hijo no pueden estar vacíos.");
-        }
-        if (!nombreConyuge.matches("[a-zA-Z][a-zA-Z ]{1,49}[a-zA-Z]")) {
-            throw new Exception("El nombre del cónyuge debe tener entre 2 y 50 caracteres, solo letras y espacios, y no comenzar ni terminar con espacios.");
-        }
-        if (!apellidoConyuge.matches("[a-zA-Z][a-zA-Z ]{1,49}[a-zA-Z]")) {
-            throw new Exception("El apellido del cónyuge debe tener entre 2 y 50 caracteres, solo letras y espacios, y no comenzar ni terminar con espacios.");
-        }
-        if (!nombreHijo.matches("[a-zA-Z][a-zA-Z ]{1,49}[a-zA-Z]")) {
-            throw new Exception("El nombre del hijo debe tener entre 2 y 50 caracteres, solo letras y espacios, y no comenzar ni terminar con espacios.");
-        }
-        if (!apellidoHijo.matches("[a-zA-Z][a-zA-Z ]{1,49}[a-zA-Z]")) {
-            throw new Exception("El apellido del hijo debe tener entre 2 y 50 caracteres, solo letras y espacios, y no comenzar ni terminar con espacios.");
-        }
-        if (numeroDocumentoConyuge.isEmpty() || !numeroDocumentoConyuge.matches("\\d+")) {
-            throw new Exception("El número de documento del cónyuge debe contener solo números.");
-        }
-        if (numeroDocumentoHijo.isEmpty() || !numeroDocumentoHijo.matches("\\d+")) {
-            throw new Exception("El número de documento del hijo debe contener solo números.");
-        }
-    }
-
-    private void validarCamposAdicionales() throws Exception {
-        String pais = texpais.getText().trim();
-        String departamento = tex_depa.getText().trim();
-        String distrito = tex_distr.getText().trim();
-        String direccion = tex_direc.getText().trim();
-        String fechaFinVinculo = tex_fecha.getText().trim();
-
-        if (pais.isEmpty() || departamento.isEmpty() || distrito.isEmpty() || direccion.isEmpty()) {
-            throw new Exception("Los campos de dirección, país, departamento y distrito no pueden estar vacíos.");
-        }
-        if (!pais.matches("[a-zA-Z][a-zA-Z ]{1,49}[a-zA-Z]")) {
-            throw new Exception("El país debe tener entre 2 y 50 caracteres, solo letras y espacios, y no comenzar ni terminar con espacios.");
-        }
-        if (!departamento.matches("[a-zA-Z][a-zA-Z ]{1,49}[a-zA-Z]")) {
-            throw new Exception("El departamento debe tener entre 2 y 50 caracteres, solo letras y espacios, y no comenzar ni terminar con espacios.");
-        }
-        if (!distrito.matches("[a-zA-Z][a-zA-Z ]{1,49}[a-zA-Z]")) {
-            throw new Exception("El distrito debe tener entre 2 y 50 caracteres, solo letras y espacios, y no comenzar ni terminar con espacios.");
-        }
-        if (direccion.length() < 5 || direccion.length() > 100) {
-            throw new Exception("La dirección debe tener entre 5 y 100 caracteres.");
-        }
-        if (!esFechaValida(fechaFinVinculo)) {
-            throw new Exception("La fecha de fin de vínculo debe tener el formato dd/MM/yyyy y no puede ser una fecha futura.");
-        }
-    }
-
-    private boolean esFechaValida(String fechaStr) {
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            sdf.setLenient(false);
-            Date fecha = sdf.parse(fechaStr);
-            Date hoy = new Date();
-            return !fecha.after(hoy);
-        } catch (ParseException e) {
-            return false;
-        }
-    }
-
-    private void guardarDatos() {
-        try {
-            validarSeleccionUnica(buttonGroup1);
+  private void guardarDatos() {
+    try {
+        validarSeleccionUnica(buttonGroup1);
+        if (boton_baja.isSelected()) {
             validarSeleccionUnica(buttonGroup2);
-            validarCamposConyugeHijo();
             validarCamposAdicionales();
+        }
+        validarCamposConyugeHijo();
 
-            SolicitudSeguroSalud2 solicitud = new SolicitudSeguroSalud2();
-            solicitud.setNombreConyuge(tex_nombreconyu.getText().trim());
-            solicitud.setApellidoConyuge(tex_apeconyu.getText().trim());
-            solicitud.setTipoDocumentoConyuge((String) comobox_numerodocu.getSelectedItem());
-            solicitud.setNumeroDocumentoConyuge(tex_numdoc2.getText().trim());
-            solicitud.setNombreHijo(tex_nomhijoma.getText().trim());
-            solicitud.setApellidoHijo(tex_apellidomayo.getText().trim());
-            solicitud.setTipoDocumentoHijo((String) ComboBox_tipodocu2.getSelectedItem());
-            solicitud.setNumeroDocumentoHijo(tex_numdoc2.getText().trim());
-            solicitud.setPais(texpais.getText().trim());
-            solicitud.setDepartamento(tex_depa.getText().trim());
-            solicitud.setDistrito(tex_distr.getText().trim());
-            solicitud.setDireccion(tex_direc.getText().trim());
-            solicitud.setTipoProceso(getSelectedButtonText(buttonGroup1));
+        SolicitudSeguroSalud2 solicitud = new SolicitudSeguroSalud2();
+        solicitud.setNombreConyuge(tex_nombreconyu.getText().trim());
+        solicitud.setApellidoConyuge(tex_apeconyu.getText().trim());
+        solicitud.setTipoDocumentoConyuge((String) comobox_numerodocu.getSelectedItem());
+        solicitud.setNumeroDocumentoConyuge(tex_numdoc2.getText().trim());
+        solicitud.setNombreHijo(tex_nomhijoma.getText().trim());
+        solicitud.setApellidoHijo(tex_apellidomayo.getText().trim());
+        solicitud.setTipoDocumentoHijo((String) ComboBox_tipodocu2.getSelectedItem());
+        solicitud.setNumeroDocumentoHijo(tex_numdoc2.getText().trim());
+        solicitud.setPais(texpais.getText().trim());
+        solicitud.setDepartamento(tex_depa.getText().trim());
+        solicitud.setDistrito(tex_distr.getText().trim());
+        solicitud.setDireccion(tex_direc.getText().trim());
+        solicitud.setTipoProceso(getSelectedButtonText(buttonGroup1));
+        if (boton_baja.isSelected()) {
             solicitud.setMotivoBaja(getSelectedButtonText(buttonGroup2));
             solicitud.setFechaFinVinculo(tex_fecha.getText().trim());
-
-            // Agregar la solicitud al repositorio
-            repositorio.addSolicitudSalud2(solicitud);
-        } catch (Exception e) {
-            mostrarError(e.getMessage());
+        } else {
+            solicitud.setMotivoBaja(null);
+            solicitud.setFechaFinVinculo(null);
         }
+
+        // Agregar la solicitud al repositorio
+        repositorio.addSolicitudSalud2(solicitud);
+    } catch (Exception e) {
+        mostrarError(e.getMessage());
     }
+}
+
+private void validarSeleccionUnica(ButtonGroup grupo) throws Exception {
+    if (grupo.getSelection() == null) {
+        throw new Exception("Debe seleccionar una opción en cada grupo de botones.");
+    }
+}
+
+private void validarCamposConyugeHijo() throws Exception {
+    String nombreConyuge = tex_nombreconyu.getText().trim();
+    String apellidoConyuge = tex_apeconyu.getText().trim();
+    String nombreHijo = tex_nomhijoma.getText().trim();
+    String apellidoHijo = tex_apellidomayo.getText().trim();
+    String numeroDocumentoConyuge = tex_numdoc2.getText().trim();
+    String numeroDocumentoHijo = tex_numdoc2.getText().trim();
+
+    if (nombreConyuge.isEmpty() || apellidoConyuge.isEmpty() || nombreHijo.isEmpty() || apellidoHijo.isEmpty()) {
+        throw new Exception("Los campos de cónyuge e hijo no pueden estar vacíos.");
+    }
+    if (!nombreConyuge.matches("[a-zA-Z][a-zA-Z ]{1,49}[a-zA-Z]")) {
+        throw new Exception("El nombre del cónyuge debe tener entre 2 y 50 caracteres, solo letras y espacios, y no comenzar ni terminar con espacios.");
+    }
+    if (!apellidoConyuge.matches("[a-zA-Z][a-zA-Z ]{1,49}[a-zA-Z]")) {
+        throw new Exception("El apellido del cónyuge debe tener entre 2 y 50 caracteres, solo letras y espacios, y no comenzar ni terminar con espacios.");
+    }
+    if (!nombreHijo.matches("[a-zA-Z][a-zA-Z ]{1,49}[a-zA-Z]")) {
+        throw new Exception("El nombre del hijo debe tener entre 2 y 50 caracteres, solo letras y espacios, y no comenzar ni terminar con espacios.");
+    }
+    if (!apellidoHijo.matches("[a-zA-Z][a-zA-Z ]{1,49}[a-zA-Z]")) {
+        throw new Exception("El apellido del hijo debe tener entre 2 y 50 caracteres, solo letras y espacios, y no comenzar ni terminar con espacios.");
+    }
+    if (numeroDocumentoConyuge.isEmpty() || !numeroDocumentoConyuge.matches("\\d+")) {
+        throw new Exception("El número de documento del cónyuge debe contener solo números.");
+    }
+    if (numeroDocumentoHijo.isEmpty() || !numeroDocumentoHijo.matches("\\d+")) {
+        throw new Exception("El número de documento del hijo debe contener solo números.");
+    }
+}
+
+private void validarCamposAdicionales() throws Exception {
+    String pais = texpais.getText().trim();
+    String departamento = tex_depa.getText().trim();
+    String distrito = tex_distr.getText().trim();
+    String direccion = tex_direc.getText().trim();
+    String fechaFinVinculo = tex_fecha.getText().trim();
+
+    if (pais.isEmpty() || departamento.isEmpty() || distrito.isEmpty() || direccion.isEmpty()) {
+        throw new Exception("Los campos de dirección, país, departamento y distrito no pueden estar vacíos.");
+    }
+    if (!pais.matches("[a-zA-Z][a-zA-Z ]{1,49}[a-zA-Z]")) {
+        throw new Exception("El país debe tener entre 2 y 50 caracteres, solo letras y espacios, y no comenzar ni terminar con espacios.");
+    }
+    if (!departamento.matches("[a-zA-Z][a-zA-Z ]{1,49}[a-zA-Z]")) {
+        throw new Exception("El departamento debe tener entre 2 y 50 caracteres, solo letras y espacios, y no comenzar ni terminar con espacios.");
+    }
+    if (!distrito.matches("[a-zA-Z][a-zA-Z ]{1,49}[a-zA-Z]")) {
+        throw new Exception("El distrito debe tener entre 2 y 50 caracteres, solo letras y espacios, y no comenzar ni terminar con espacios.");
+    }
+    if (direccion.length() < 5 || direccion.length() > 100) {
+        throw new Exception("La dirección debe tener entre 5 y 100 caracteres.");
+    }
+    if (!esFechaValida(fechaFinVinculo)) {
+        throw new Exception("La fecha de fin de vínculo debe tener el formato dd/MM/yyyy y no puede ser una fecha futura.");
+    }
+}
+
+private boolean esFechaValida(String fechaStr) {
+    try {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        sdf.setLenient(false);
+        Date fecha = sdf.parse(fechaStr);
+        Date hoy = new Date();
+        return !fecha.after(hoy);
+    } catch (ParseException e) {
+        return false;
+    }
+}
 
     private void mostrarError(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
