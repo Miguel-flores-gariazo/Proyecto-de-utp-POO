@@ -1,4 +1,6 @@
-package GUI;
+package plazavea.capacitacion;
+
+import GUI.JFrame_Menu;
 
 public class jframe_tablacapacitacion extends javax.swing.JFrame {
 
@@ -55,6 +57,11 @@ public class jframe_tablacapacitacion extends javax.swing.JFrame {
         boton_buscar.setText("BUSCAR");
 
         boton_salir.setText("SALIR");
+        boton_salir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boton_salirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -105,6 +112,12 @@ public class jframe_tablacapacitacion extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void boton_salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_salirActionPerformed
+       JFrame_Menu menu=new JFrame_Menu();
+             menu.setVisible(true);
+             dispose();
+    }//GEN-LAST:event_boton_salirActionPerformed
 
     /**
      * @param args the command line arguments
