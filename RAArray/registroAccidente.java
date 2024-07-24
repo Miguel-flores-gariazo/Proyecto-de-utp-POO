@@ -1,5 +1,6 @@
 package RAArray;
 
+import GUI.JFrame_Menu;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
@@ -515,6 +516,11 @@ public class ExcelExporter {
         );
 
         jButton1.setText("ATRAS");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         btnGuardar1.setText("GUARDAR");
         btnGuardar1.addActionListener(new java.awt.event.ActionListener() {
@@ -773,6 +779,12 @@ if (returnValue == JFileChooser.APPROVE_OPTION) {
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         generarGraficoAccidentes();
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        JFrame_Menu login = new JFrame_Menu();
+    login.setVisible(true);
+    dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
