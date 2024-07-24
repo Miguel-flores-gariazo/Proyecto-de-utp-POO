@@ -1,9 +1,9 @@
 package RAArray;
 
+import GUI.JFrame_Menu;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
-import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -13,48 +13,160 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
+import java.awt.Component;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import com.opencsv.CSVWriter;
-import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Iterator;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class registroAccidente extends javax.swing.JFrame {
-    
-   
+
     private final ArrayList<Accidente> listaAccidentes = new ArrayList<>();
-    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     private javax.swing.table.DefaultTableModel modeloTabla;
     
-
     public registroAccidente() {
         initComponents();
-        modeloTabla = (DefaultTableModel) jTable1.getModel();
-        jTable1.setModel(modeloTabla);
+        jDateChooser1.setDate(new Date()); // Establecer la fecha actual como valor predeterminado
+
+    jDateChooser1.addPropertyChangeListener(new PropertyChangeListener() {
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals("date")) {
+            Date selectedDate = (Date) evt.getNewValue();
+            Date currentDate = new Date();
+            if (selectedDate != null && selectedDate.after(currentDate)) {
+                jDateChooser1.setDate(currentDate);
+            }
+        }
+    }
+    });
+        modeloTabla = (DefaultTableModel) jtDatos.getModel();
+        jtDatos.setModel(modeloTabla);
         modeloTabla.setRowCount(0);
+        jtDatos.getColumnModel().getColumn(5).setCellRenderer(new FechaTableCellRenderer());
+        jtDatos.getColumnModel().getColumn(7).setCellRenderer(new FechaTableCellRenderer());
     }
 
+    private class FechaTableCellRenderer extends DefaultTableCellRenderer {
+        private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            if (value instanceof Date) {
+                value = sdf.format((Date) value);
+            }
+            return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        }
+    }
+    
     private void guardarAccidente() {
-        String idEmpleado = TFID.getText();
-        String tipoDocumento = CBTD.getSelectedItem().toString();
-        String numeroDocumento = ND.getText();
-        String nombres = NOMBRES.getText();
-        String apellidos = APELLIDOS.getText();
-        String sexo = (String) jComboBox2.getSelectedItem();
-        String tipoAccidente = (String) jComboBox3.getSelectedItem();
-        String descripcion = jTextArea1.getText();
-        Date fechaAccidente = jDateChooser1.getDate();
-        Date fechaNacimiento = jDateChooser2.getDate();
+    if (TFID.getText().isEmpty()
+        || CBTD.getSelectedItem() == null
+        || ND.getText().isEmpty()
+        || NOMBRES.getText().isEmpty()
+        || APELLIDOS.getText().isEmpty()
+        || jComboBox2.getSelectedItem() == null
+        || jComboBox3.getSelectedItem() == null
+        || jTextArea1.getText().isEmpty()
+        || jDateChooser1.getDate() == null
+        || jDateChooser2.getDate() == null) {
 
-        Accidente accidente = new Accidente(idEmpleado, tipoDocumento, numeroDocumento, nombres, apellidos, fechaNacimiento, sexo, fechaAccidente, tipoAccidente, descripcion);
+        JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }  
+    
+    String idEmpleado = TFID.getText();
+    for (Accidente accidente : listaAccidentes) {
+        if (accidente.getIdEmpleado().equals(idEmpleado)) {
+            JOptionPane.showMessageDialog(this, "El ID de empleado ya existe. Por favor, ingrese un ID diferente.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+    }
+    
+    if (NOMBRES.getText().length() < 4) {
+        JOptionPane.showMessageDialog(this, "El nombre debe tener al menos 4 caracteres.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
 
-        listaAccidentes.add(accidente);
-        modeloTabla.addRow(new Object[]{idEmpleado, tipoDocumento, numeroDocumento, nombres, apellidos, fechaNacimiento, sexo, fechaAccidente, tipoAccidente, descripcion});
+    if (APELLIDOS.getText().length() < 4) {
+        JOptionPane.showMessageDialog(this, "El apellido debe tener al menos 4 caracteres.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
 
-        limpiarCampos();
+    if (jTextArea1.getText().length() < 4) {
+        JOptionPane.showMessageDialog(this, "La descripción debe tener al menos 4 caracteres.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    Date fechaNacimiento = jDateChooser2.getDate();
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(fechaNacimiento);
+    calendar.add(Calendar.YEAR, 18);
+    Date fechaMinima = calendar.getTime();
+
+    if (new Date().before(fechaMinima)) {
+        JOptionPane.showMessageDialog(this, "Necesitas ser mayor de edad.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    String tipoDocumento = CBTD.getSelectedItem().toString();
+    String numeroDocumento = ND.getText();
+    
+    
+
+    if (tipoDocumento.equals("DNI") && numeroDocumento.length() != 8) {
+        JOptionPane.showMessageDialog(this, "El DNI debe tener 8 dígitos", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    } else if (tipoDocumento.equals("Carnet de Extranjería") && numeroDocumento.length() != 12) {
+        JOptionPane.showMessageDialog(this, "El Carnet de Extranjería debe tener 12 dígitos", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    } else if (tipoDocumento.equals("Registro Único de Contribuyentes") && (numeroDocumento.length() != 8 && numeroDocumento.length() != 11)) {
+        JOptionPane.showMessageDialog(this, "El RUC debe tener 8 o 11 dígitos", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    } else if (tipoDocumento.equals("Partida de Nacimiento")) {
+        ND.setEditable(false); // bloquear el campo de número de documento
+        numeroDocumento = ""; // vaciar el campo de número de documento
+    }
+
+    Accidente accidente = new Accidente(TFID.getText(), CBTD.getSelectedItem().toString(), ND.getText(), NOMBRES.getText(), APELLIDOS.getText(), jDateChooser2.getDate(), jComboBox2.getSelectedItem().toString(), jDateChooser1.getDate(), jComboBox3.getSelectedItem().toString(), jTextArea1.getText());
+
+    listaAccidentes.add(accidente);
+    modeloTabla.addRow(new Object[]{
+        accidente.getIdEmpleado(),
+        accidente.getTipoDocumento(),
+        accidente.getNumeroDocumento(),
+        accidente.getNombres(),
+        accidente.getApellidos(),
+        accidente.getFechaNacimiento(),
+        accidente.getSexo(),
+        accidente.getFechaAccidente(),
+        accidente.getTipoAccidente(),
+        accidente.getDescripcion()
+    });
+
+    Date fechaAccidente = jDateChooser1.getDate();
+    
+    limpiarCampos();
+    
+    // Establecer la fecha de accidente en el jDateChooser1
+    jDateChooser1.setDate(fechaAccidente);
     }
     
     private void modificarAccidente() {
-    int selectedRow = jTable1.getSelectedRow();
-    if (selectedRow != -1) {
+    int selectedRow = jtDatos.getSelectedRow();
+        if (selectedRow != -1 && selectedRow < listaAccidentes.size()) {
         Accidente accidente = listaAccidentes.get(selectedRow);
         accidente.setIdEmpleado(TFID.getText());
         accidente.setTipoDocumento(CBTD.getSelectedItem().toString());
@@ -82,10 +194,33 @@ public class registroAccidente extends javax.swing.JFrame {
     }
 }
 
+    
+public class ExcelExporter {
+    public void exportToExcel(JTable table, String excelFilePath) throws IOException {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Sheet1");
 
+        // Recorre las filas y columnas del JTable
+        for (int rowIndex = 0; rowIndex < table.getRowCount(); rowIndex++) {
+            Row row = sheet.createRow(rowIndex);
+
+            for (int colIndex = 0; colIndex < table.getColumnCount(); colIndex++) {
+                Cell cell = row.createCell(colIndex);
+                cell.setCellValue(table.getValueAt(rowIndex, colIndex).toString());
+            }
+        }
+
+        // Guarda el archivo de Excel
+        FileOutputStream fileOut = new FileOutputStream(new File(excelFilePath));
+        workbook.write(fileOut);
+        fileOut.close();
+        workbook.close();
+    }
+}
+    
     private void cargarAccidenteParaModificar() {
-        int selectedRow = jTable1.getSelectedRow();
-        if (selectedRow != -1) {
+        int selectedRow = jtDatos.getSelectedRow();
+        if (selectedRow != -1 && selectedRow < listaAccidentes.size()) {
             Accidente accidente = listaAccidentes.get(selectedRow);
             TFID.setText(accidente.getIdEmpleado());
             CBTD.setSelectedItem(accidente.getTipoDocumento());
@@ -103,7 +238,7 @@ public class registroAccidente extends javax.swing.JFrame {
     }
 
     private void limpiarTabla() {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        DefaultTableModel model = (DefaultTableModel) jtDatos.getModel();
         model.setRowCount(0);
         listaAccidentes.clear();
     }
@@ -121,177 +256,6 @@ public class registroAccidente extends javax.swing.JFrame {
         jDateChooser1.setDate(null);
         jDateChooser2.setDate(null);
     }
-    
-    public void exportarDatos() {
-    JFileChooser chooser = new JFileChooser();
-    int opcion = chooser.showSaveDialog(this); // Abre el dialogo para guardar archivo
-
-    if (opcion == JFileChooser.APPROVE_OPTION) {
-        File archivo = chooser.getSelectedFile();
-        String filePath = archivo.getAbsolutePath();
-
-        if (!filePath.toLowerCase().endsWith(".csv")) {
-            archivo = new File(filePath + ".csv");
-        }
-
-        try (CSVWriter writer = new CSVWriter(new FileWriter(archivo))) {
-            for (Accidente accidente : listaAccidentes) {
-                writer.writeNext(obtenerDatosAccidente(accidente));
-            }
-            JOptionPane.showMessageDialog(this, "Datos exportados correctamente a " + archivo.getAbsolutePath(), "Éxito", JOptionPane.INFORMATION_MESSAGE);
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(this, "Error al exportar datos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            ex.printStackTrace();
-        }
-    }
-}
-
-private String[] obtenerDatosAccidente(Accidente accidente) {
-    String fechaNacimiento = accidente.getFechaNacimiento() != null ? sdf.format(accidente.getFechaNacimiento()) : "";
-    String fechaAccidente = accidente.getFechaAccidente() != null ? sdf.format(accidente.getFechaAccidente()) : "";
-
-    return new String[]{
-            accidente.getIdEmpleado(),
-            accidente.getTipoDocumento(),
-            accidente.getNumeroDocumento(),
-            accidente.getNombres(),
-            accidente.getApellidos(),
-            fechaNacimiento,
-            accidente.getSexo(),
-            fechaAccidente,
-            accidente.getTipoAccidente(),
-            accidente.getDescripcion()
-    };
-}
-
-
-
-private void importarDatos() {
-    JFileChooser chooser = new JFileChooser();
-    int opcion = chooser.showOpenDialog(this);
-
-    if (opcion == JFileChooser.APPROVE_OPTION) {
-        File archivoSeleccionado = chooser.getSelectedFile();
-        try (BufferedReader br = new BufferedReader(new FileReader(archivoSeleccionado))) {
-            String linea;
-
-            // Limpiar la tabla antes de importar nuevos datos
-            limpiarTabla();
-
-            boolean primeraLinea = true; // Para omitir la primera línea si es un encabezado
-            while ((linea = br.readLine()) != null) {
-                if (primeraLinea) {
-                    primeraLinea = false;
-                    continue; // Saltar la primera línea si es un encabezado
-                }
-
-                String[] datos = linea.split(",");
-
-                if (datos.length != 10) {
-                    throw new Exception("Formato incorrecto en el archivo CSV.");
-                }
-
-                Accidente accidente = new Accidente();
-                accidente.setIdEmpleado(datos[0]);
-                accidente.setTipoDocumento(datos[1]);
-                accidente.setNumeroDocumento(datos[2]);
-                accidente.setNombres(datos[3]);
-                accidente.setApellidos(datos[4]);
-
-                // Verificar si la fecha de nacimiento es vacía
-                if (!datos[5].trim().isEmpty()) {
-                    try {
-                        accidente.setFechaNacimiento(sdf.parse(datos[5]));
-                    } catch (ParseException e) {
-                        JOptionPane.showMessageDialog(this, "Error al parsear fecha de nacimiento: " + datos[5]);
-                        continue; // Saltar a la siguiente línea
-                    }
-                } else {
-                    accidente.setFechaNacimiento(null); // Asignar null si la fecha es vacía
-                }
-
-                accidente.setSexo(datos[6]);
-
-                // Verificar si la fecha de accidente es vacía
-                if (!datos[7].trim().isEmpty()) {
-                    try {
-                        accidente.setFechaAccidente(sdf.parse(datos[7]));
-                    } catch (ParseException e) {
-                        JOptionPane.showMessageDialog(this, "Error al parsear fecha de accidente: " + datos[7]);
-                        continue; // Saltar a la siguiente línea
-                    }
-                } else {
-                    accidente.setFechaAccidente(null); // Asignar null si la fecha es vacía
-                }
-
-                accidente.setTipoAccidente(datos[8]);
-                accidente.setDescripcion(datos[9]);
-
-                listaAccidentes.add(accidente); // Agregar el objeto Accidente a la lista
-
-                // Agregar el objeto Accidente a la tabla
-                Object[] fila = new Object[] {
-                    accidente.getIdEmpleado(),
-                    accidente.getTipoDocumento(),
-                    accidente.getNumeroDocumento(),
-                    accidente.getNombres(),
-                    accidente.getApellidos(),
-                    accidente.getFechaNacimiento()!= null? sdf.format(accidente.getFechaNacimiento()) : "",
-                    accidente.getSexo(),
-                    accidente.getFechaAccidente()!= null? sdf.format(accidente.getFechaAccidente()) : "",
-                    accidente.getTipoAccidente(),
-                    accidente.getDescripcion()
-                };
-                modeloTabla.addRow(fila); // Agregar la fila a la tabla
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al importar archivo CSV: " + e.getMessage());
-        }
-    }
-}
-
-private final SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy");
-
-private void actualizarTabla() {
-    modeloTabla.setRowCount(0); // Limpiar la tabla
-    for (Accidente accidente : listaAccidentes) {
-        Object[] fila = new Object[]{
-            accidente.getIdEmpleado(),
-            accidente.getTipoDocumento(),
-            accidente.getNumeroDocumento(),
-            accidente.getNombres(),
-            accidente.getApellidos(),
-            accidente.getFechaNacimiento() != null ? sdf2.format(accidente.getFechaNacimiento()) : "",
-            accidente.getSexo(),
-            accidente.getFechaAccidente() != null ? sdf2.format(accidente.getFechaAccidente()) : "",
-            accidente.getTipoAccidente(),
-            accidente.getDescripcion()
-        };
-        modeloTabla.addRow(fila); // Agregar la fila a la tabla
-    }
-    modeloTabla.fireTableDataChanged(); // Notificar a la tabla que los datos han cambiado
-}
-    
-    
-    private Accidente crearAccidenteDesdeLineaCSV(String line) throws Exception {
-    String[] values = line.split(",");
-    if (values.length != 10) {
-        throw new Exception("Formato incorrecto en el archivo CSV.");
-    }
-
-    String idEmpleado = values[0];
-    String tipoDocumento = values[1];
-    String numeroDocumento = values[2];
-    String nombres = values[3];
-    String apellidos = values[4];
-    Date fechaNacimiento = sdf.parse(values[5]);
-    String sexo = values[6];
-    Date fechaAccidente = sdf.parse(values[7]);
-    String tipoAccidente = values[8];
-    String descripcion = values[9];
-
-    return new Accidente(idEmpleado, tipoDocumento, numeroDocumento, nombres, apellidos, fechaNacimiento, sexo, fechaAccidente, tipoAccidente, descripcion);
-}
     
     
     
@@ -334,9 +298,6 @@ private void actualizarTabla() {
     frame.setVisible(true);
 }
 
-    
-
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -371,18 +332,18 @@ private void actualizarTabla() {
         jButton1 = new javax.swing.JButton();
         btnGuardar1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jtDatos = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        btnExportar = new javax.swing.JButton();
+        btnImportar = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("REGISTRO DE ACCIDENTES"));
 
-        jLabel1.setText("ID Empleado");
+        jLabel1.setText("ID Accidente");
 
         jLabel2.setText("Tipo de Documnto");
 
@@ -555,6 +516,11 @@ private void actualizarTabla() {
         );
 
         jButton1.setText("ATRAS");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         btnGuardar1.setText("GUARDAR");
         btnGuardar1.addActionListener(new java.awt.event.ActionListener() {
@@ -563,26 +529,28 @@ private void actualizarTabla() {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jtDatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "ID", "TIPO DE DOCUMENTO", "N° DOCUMENTO", "NOMBRES", "APELLIDOS", "FECHA DE NACIMIENTO", "SEXO", "FECHA DE ACCIDENTE", "GRAVEDAD DE ACCIDENTE", "DESCRIPCION"
             }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Object.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(jTable1);
+        ));
+        jtDatos.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(jtDatos);
+        if (jtDatos.getColumnModel().getColumnCount() > 0) {
+            jtDatos.getColumnModel().getColumn(0).setResizable(false);
+            jtDatos.getColumnModel().getColumn(1).setResizable(false);
+            jtDatos.getColumnModel().getColumn(2).setResizable(false);
+            jtDatos.getColumnModel().getColumn(3).setResizable(false);
+            jtDatos.getColumnModel().getColumn(4).setResizable(false);
+            jtDatos.getColumnModel().getColumn(5).setResizable(false);
+            jtDatos.getColumnModel().getColumn(6).setResizable(false);
+            jtDatos.getColumnModel().getColumn(7).setResizable(false);
+            jtDatos.getColumnModel().getColumn(8).setResizable(false);
+            jtDatos.getColumnModel().getColumn(9).setResizable(false);
+        }
 
         jButton2.setText("ELIMINAR");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -598,17 +566,17 @@ private void actualizarTabla() {
             }
         });
 
-        jButton4.setText("EXPORTAR");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btnExportar.setText("EXPORTAR");
+        btnExportar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btnExportarActionPerformed(evt);
             }
         });
 
-        jButton5.setText("IMPORTAR");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        btnImportar.setText("IMPORTAR");
+        btnImportar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                btnImportarActionPerformed(evt);
             }
         });
 
@@ -631,20 +599,20 @@ private void actualizarTabla() {
                         .addGap(286, 286, 286)
                         .addComponent(jButton6)
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton5)
+                        .addComponent(btnImportar)
                         .addGap(33, 33, 33)
-                        .addComponent(jButton4)
+                        .addComponent(btnExportar)
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
                                 .addComponent(btnGuardar1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(41, 41, 41)
                                 .addComponent(jButton3)
                                 .addGap(39, 39, 39)
                                 .addComponent(jButton2))
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 680, Short.MAX_VALUE)
                         .addGap(12, 12, 12))))
@@ -656,14 +624,15 @@ private void actualizarTabla() {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton1)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton4)
-                        .addComponent(jButton5)
+                        .addComponent(btnExportar)
+                        .addComponent(btnImportar)
                         .addComponent(jButton6)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnGuardar1)
                             .addComponent(jButton2)
@@ -704,7 +673,7 @@ private void actualizarTabla() {
     }//GEN-LAST:event_btnGuardar1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-    int selectedRow = jTable1.getSelectedRow();
+    int selectedRow = jtDatos.getSelectedRow();
     if (selectedRow!= -1) {
         listaAccidentes.remove(selectedRow);
         modeloTabla.removeRow(selectedRow);
@@ -728,8 +697,9 @@ private void actualizarTabla() {
     private void NDKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NDKeyTyped
      
         char c = evt.getKeyChar();
-
-        if(c<'0' || c>'9') evt.consume();    
+    if (c < '0' || c > '9' || (ND.getText().length() == 8 && c != '\u0008')) { 
+        evt.consume();
+    }   
 
     }//GEN-LAST:event_NDKeyTyped
 
@@ -745,17 +715,76 @@ private void actualizarTabla() {
         if((c<'a' || c>'z') && (c<'A')| c>'z') evt.consume();
     }//GEN-LAST:event_APELLIDOSKeyTyped
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        exportarDatos();
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void btnExportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportarActionPerformed
+    try {
+        ExcelExporter exporter = new ExcelExporter();
+        exporter.exportToExcel(jtDatos, "accidentes.xlsx");
+        JOptionPane.showMessageDialog(this, "Los datos se han exportado correctamente a accidentes.xlsx");
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(this, "Error al exportar los datos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }    
+    }//GEN-LAST:event_btnExportarActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        importarDatos();
-    }//GEN-LAST:event_jButton5ActionPerformed
+    private void btnImportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImportarActionPerformed
+    JFileChooser fileChooser = new JFileChooser();
+fileChooser.setFileFilter(new FileNameExtensionFilter("Archivos de Excel", "xlsx"));
+int returnValue = fileChooser.showOpenDialog(this);
+if (returnValue == JFileChooser.APPROVE_OPTION) {
+    File selectedFile = fileChooser.getSelectedFile();
+    try {
+        FileInputStream fileInputStream = new FileInputStream(selectedFile);
+        XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
+        XSSFSheet sheet = workbook.getSheetAt(0);
+        Iterator<Row> rowIterator = sheet.iterator();
+        DefaultTableModel modeloTabla = (DefaultTableModel) jtDatos.getModel();
+        modeloTabla.setRowCount(0); // Limpiar la tabla antes de agregar nuevos datos
+        while (rowIterator.hasNext()) {
+            Row row = rowIterator.next();
+            Iterator<Cell> cellIterator = row.cellIterator();
+            Object[] fila = new Object[10]; // Crear un arreglo para almacenar los datos de la fila
+            int columnIndex = 0;
+            while (cellIterator.hasNext()) {
+                Cell cell = cellIterator.next();
+                switch (columnIndex) {
+                    case 0:
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 6:
+                    case 8:
+                    case 9:
+                        fila[columnIndex] = cell.getStringCellValue();
+                        break;
+                    case 5:
+                    case 7:
+                        if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                            fila[columnIndex] = cell.getDateCellValue();
+                        } else {
+                            fila[columnIndex] = cell.getStringCellValue();
+                        }
+                        break;
+                }
+                columnIndex++;
+            }
+            modeloTabla.addRow(fila); // Agregar la fila a la tabla
+        }
+        JOptionPane.showMessageDialog(this, "Los datos se han importado correctamente");
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(this, "Error al importar los datos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}      
+    }//GEN-LAST:event_btnImportarActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         generarGraficoAccidentes();
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        JFrame_Menu login = new JFrame_Menu();
+    login.setVisible(true);
+    dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -774,12 +803,12 @@ private void actualizarTabla() {
     public javax.swing.JTextField ND;
     public javax.swing.JTextField NOMBRES;
     public javax.swing.JTextField TFID;
+    public javax.swing.JButton btnExportar;
     public javax.swing.JButton btnGuardar1;
+    public javax.swing.JButton btnImportar;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
@@ -797,13 +826,9 @@ private void actualizarTabla() {
     public javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextArea jTextArea1;
+    public javax.swing.JTable jtDatos;
     // End of variables declaration//GEN-END:variables
-
-    
-
-   
- }
+}
 
 
