@@ -1,5 +1,9 @@
 package GUI;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.regex.Pattern;
 import plazavea.solicitudseguro.SolicitudSeguroSalud;
 
 import javax.swing.JOptionPane;
@@ -21,66 +25,127 @@ private SolicitudSeguroSalud solicitud;
     }
 
     private boolean validarCampos() {
+        // Verifica si al menos uno de los campos no está vacío
+        // Verifica si al menos uno de los campos no está vacío
+        boolean hayDatos = !tex_razonsocial.getText().trim().isEmpty() ||
+                           !tex_numeroruc.getText().trim().isEmpty() ||
+                           !tex_apellidoP.getText().trim().isEmpty() ||
+                           !tex_apellidoM.getText().trim().isEmpty() ||
+                           !tex_nombres.getText().trim().isEmpty() ||
+                           !tex_numero.getText().trim().isEmpty() ||
+                           !tex_fecha.getText().trim().isEmpty() ||
+                           !tex_numertelefono.getText().trim().isEmpty() ||
+                           !tex_gmail.getText().trim().isEmpty() ||
+                           !tex_direccion.getText().trim().isEmpty() ||
+                           boton_hombre.isSelected() ||
+                           boton_nujer.isSelected() ||
+                           boton_solter.isSelected() ||
+                           boton_casad.isSelected() ||
+                           boton_divorciad.isSelected() ||
+                           boton_viudo.isSelected();
+
+        if (!hayDatos) {
+            mostrarError("Debe ingresar al menos un campo con datos.");
+            return false;
+        }
+
         String razonSocial = tex_razonsocial.getText().trim();
-        if (razonSocial.isEmpty()) {
-            mostrarError("Debe ingresar la razón social (nombre de la empresa).");
+        if (razonSocial.isEmpty() || razonSocial.length() < 2 || razonSocial.length() > 100 || !razonSocial.matches("[a-zA-Z ]+")) {
+            mostrarError("La razón social debe tener entre 2 y 100 caracteres y no debe contener caracteres especiales.");
             return false;
         }
+
         String ruc = tex_numeroruc.getText().trim();
-        if (ruc.isEmpty()) {
-            mostrarError("Debe ingresar el número de RUC.");
+        if (ruc.isEmpty() || ruc.length() != 11 || !ruc.matches("\\d+")) {
+            mostrarError("El número de RUC debe tener 11 dígitos y contener solo números.");
             return false;
         }
+
         String apellidoPaterno = tex_apellidoP.getText().trim();
-        if (apellidoPaterno.isEmpty()) {
-            mostrarError("Debe ingresar el apellido paterno del afiliado titular.");
+        if (apellidoPaterno.isEmpty() || !apellidoPaterno.matches("[a-zA-Z ]{2,50}")) {
+            mostrarError("El apellido paterno debe tener entre 2 y 50 caracteres y solo debe contener letras.");
             return false;
         }
+
         String apellidoMaterno = tex_apellidoM.getText().trim();
-        if (apellidoMaterno.isEmpty()) {
-            mostrarError("Debe ingresar el apellido materno del afiliado titular.");
+        if (apellidoMaterno.isEmpty() || !apellidoMaterno.matches("[a-zA-Z ]{2,50}")) {
+            mostrarError("El apellido materno debe tener entre 2 y 50 caracteres y solo debe contener letras.");
             return false;
         }
+
         String nombres = tex_nombres.getText().trim();
-        if (nombres.isEmpty()) {
-            mostrarError("Debe ingresar los nombres del afiliado titular.");
+        if (nombres.isEmpty() || !nombres.matches("[a-zA-Z ]{2,50}")) {
+            mostrarError("Los nombres deben tener entre 2 y 50 caracteres y solo deben contener letras.");
             return false;
         }
-        String tipoDocumento = combox_tipodocu.getSelectedItem().toString();
+
         String numeroDocumento = tex_numero.getText().trim();
-        if (numeroDocumento.isEmpty()) {
-            mostrarError("Debe ingresar el número de documento del afiliado titular.");
+        if (numeroDocumento.isEmpty() || !numeroDocumento.matches("\\d+")) {
+            mostrarError("El número de documento debe contener solo números.");
             return false;
         }
+
         String fechaNacimiento = tex_fecha.getText().trim();
-        if (fechaNacimiento.isEmpty()) {
-            mostrarError("Debe ingresar la fecha de nacimiento del afiliado titular.");
+        if (fechaNacimiento.isEmpty() || !esFechaValida(fechaNacimiento)) {
+            mostrarError("La fecha de nacimiento debe tener el formato dd/MM/yyyy y no puede ser una fecha futura o una fecha en la que la persona sea menor de 18 años.");
             return false;
         }
+
         if (!boton_hombre.isSelected() && !boton_nujer.isSelected()) {
             mostrarError("Debe seleccionar el sexo del afiliado titular.");
             return false;
         }
+
         if (!boton_solter.isSelected() && !boton_casad.isSelected() && !boton_divorciad.isSelected() && !boton_viudo.isSelected()) {
             mostrarError("Debe seleccionar el estado civil del afiliado titular.");
             return false;
         }
+
         String numeroTelefono = tex_numertelefono.getText().trim();
-        if (numeroTelefono.isEmpty() || numeroTelefono.length() != 9) {
-            mostrarError("Debe ingresar un número de teléfono válido (9 dígitos).");
+        if (numeroTelefono.isEmpty() || numeroTelefono.length() != 9 || !numeroTelefono.matches("\\d+")) {
+            mostrarError("Debe ingresar un número de teléfono válido (9 dígitos y solo números).");
             return false;
         }
+
         String email = tex_gmail.getText().trim();
-        if (email.isEmpty() || !email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+        if (email.isEmpty() || !esEmailValido(email)) {
             mostrarError("Debe ingresar un correo electrónico válido.");
             return false;
         }
+
         String direccion = tex_direccion.getText().trim();
-        if (direccion.isEmpty()) {
-            mostrarError("Debe ingresar la dirección del afiliado titular.");
+        if (direccion.isEmpty() || direccion.length() < 5 || direccion.length() > 100) {
+            mostrarError("La dirección debe tener entre 5 y 100 caracteres.");
             return false;
         }
+
         return true;
+    }
+
+    private boolean esFechaValida(String fechaStr) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            sdf.setLenient(false);
+            Date fecha = sdf.parse(fechaStr);
+            Date hoy = new Date();
+            return !fecha.after(hoy) && calcularEdad(fecha) >= 18;
+        } catch (ParseException e) {
+            return false;
+        }
+    }
+
+    private int calcularEdad(Date fechaNacimiento) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        int añoActual = Integer.parseInt(sdf.format(new Date()));
+        int añoNacimiento = Integer.parseInt(sdf.format(fechaNacimiento));
+        return añoActual - añoNacimiento;
+    }
+
+    private boolean esEmailValido(String email) {
+        // Expresión regular mejorada para la validación de correos electrónicos
+        String regex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|\\[?[a-zA-Z0-9-]*:[a-zA-Z0-9-]*\\]?)$";
+        Pattern pattern = Pattern.compile(regex);
+        return pattern.matcher(email).matches();
     }
 
     private void mostrarError(String mensaje) {
@@ -88,22 +153,26 @@ private SolicitudSeguroSalud solicitud;
     }
 
     private void guardarDatos() {
-        solicitud = new SolicitudSeguroSalud(
-                tex_razonsocial.getText().trim(),
-                tex_numeroruc.getText().trim(),
-                tex_apellidoP.getText().trim(),
-                tex_apellidoM.getText().trim(),
-                tex_nombres.getText().trim(),
-                combox_tipodocu.getSelectedItem().toString(),
-                tex_numero.getText().trim(),
-                tex_fecha.getText().trim(),
-                boton_hombre.isSelected() ? "Hombre" : "Mujer",
-                boton_solter.isSelected() ? "Soltero(a)" : boton_casad.isSelected() ? "Casado(a)" : boton_divorciad.isSelected() ? "Divorciado(a)" : "Viudo(a)",
-                tex_numertelefono.getText().trim(),
-                tex_gmail.getText().trim(),
-                tex_direccion.getText().trim()
-        );
+        if (validarCampos()) {
+            solicitud = new SolicitudSeguroSalud(
+                    tex_razonsocial.getText().trim(),
+                    tex_numeroruc.getText().trim(),
+                    tex_apellidoP.getText().trim(),
+                    tex_apellidoM.getText().trim(),
+                    tex_nombres.getText().trim(),
+                    combox_tipodocu.getSelectedItem().toString(),
+                    tex_numero.getText().trim(),
+                    tex_fecha.getText().trim(),
+                    boton_hombre.isSelected() ? "Hombre" : "Mujer",
+                    boton_solter.isSelected() ? "Soltero(a)" : boton_casad.isSelected() ? "Casado(a)" : boton_divorciad.isSelected() ? "Divorciado(a)" : "Viudo(a)",
+                    tex_numertelefono.getText().trim(),
+                    tex_gmail.getText().trim(),
+                    tex_direccion.getText().trim()
+            );
+            // Lógica para guardar la solicitud
+        }
     }
+
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

@@ -128,14 +128,14 @@ public class JFrame_gestorsolisitud extends javax.swing.JFrame {
 
             },
             new String [] {
-                "DNI", "Nombre", "APELLIDO", "TIPO DE SOLICITUD", "FECHA DE SOLICITUD", "ESTADO"
+                "ID", "Nombre", "APELLIDO", "TIPO DE SOLICITUD", "FECHA DE SOLICITUD", "ESTADO"
             }
         ) {
             Class[] types = new Class [] {
                 java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Integer.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, true, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -147,14 +147,6 @@ public class JFrame_gestorsolisitud extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(tbsolicitud);
-        if (tbsolicitud.getColumnModel().getColumnCount() > 0) {
-            tbsolicitud.getColumnModel().getColumn(0).setResizable(false);
-            tbsolicitud.getColumnModel().getColumn(1).setResizable(false);
-            tbsolicitud.getColumnModel().getColumn(2).setResizable(false);
-            tbsolicitud.getColumnModel().getColumn(3).setResizable(false);
-            tbsolicitud.getColumnModel().getColumn(4).setResizable(false);
-            tbsolicitud.getColumnModel().getColumn(5).setResizable(false);
-        }
 
         titulo.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
         titulo.setText("GESTOR DE SOLICITUDES ");
@@ -193,7 +185,7 @@ public class JFrame_gestorsolisitud extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(20, 20, 20)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -207,10 +199,10 @@ public class JFrame_gestorsolisitud extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(btbuscar)
                             .addComponent(regresar, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btn_Eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(27, 27, 27)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 892, Short.MAX_VALUE)
                 .addGap(14, 14, 14))
         );
         layout.setVerticalGroup(
